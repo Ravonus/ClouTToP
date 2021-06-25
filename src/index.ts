@@ -17,8 +17,6 @@ const createWindow = async () => {
   const wallpaper = await wp;
   // Create the browser window.
 
-  const displays = screen.getAllDisplays();
-
   const mainWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegrationInSubFrames: true,
