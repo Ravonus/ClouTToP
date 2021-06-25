@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Menus</title>
+
+  <link rel="stylesheet" href="../src/index.css">
+
+</head>
+
+<body>
+
+  <webview preload="../dist/test.js" sandbox id="foo" src="http://html5wallpaper.com/wp-depo/727/">
+    <div class="indicator"></div>
+  </webview>
+
+
+  <script type="text/javascript">
+    // Event handlers for loading events.
+    // Use these to handle loading screens, transitions, etc
+
+    const { screen } = require('electron').remote
+
+    const displays = screen.getAllDisplays();
+    onload = () => {
+
+      const webview = document.getElementById('foo')
+      const indicator = document.querySelector('.indicator')
+
+      const loadstart = () => {
+        indicator.innerText = 'loading...'
+      }
+
+      const loadstop = () => {
+        indicator.innerText = ''
+        console.log("RAN", webview)
+
+        webview.insertCSS('html,body{ background-color: rgba(255, 255, 255, 0) !important; background: rgba(255, 255, 255, 0) !important;}, ::-webkit - scrollbar{display: none;}')
+        webview.openDevTools();
+
+
+        setTimeout(() => {
+
+          webview.sendInputEvent({ type: 'mouseDown', x: 1263, y: 730, button: 'left', clickCount: 100 });
+          // webview.sendInputEvent({ type: 'mouseUp', x: 1263, y: 730, button: 'left', clickCount: 1 });
+
+          console.log("RAN", webview)
+
+          var b = document.body
+
+          b.addEventListener('click', function (event) { console.log(event.pageX, event.pageY) }, false);
+
+          webview.sendInputEvent({ type: 'mouseUp', x: 1263, y: 730, button: 'left', globalX: 1263, globalY: 730 });
+          webview.insertBefore
+
+          console.log("RAN")
+
+        }, 5000);
+
+
+
+      }
+
+      console.log(displays[0].size.height)
+
+
+      // webview.style.width = '1'
+      webview.style.width = `${displays[0].size.width}px`
+      webview.style.height = `${displays[0].size.height}px`
+
+
+
+      webview.addEventListener('did-start-loading', loadstart)
+      webview.addEventListener('did-stop-loading', loadstop)
+    }
+  </script>
+</body>
+
+</html>
