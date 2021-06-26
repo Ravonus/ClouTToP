@@ -1,0 +1,136 @@
+{
+  "name": "nodepaper",
+  "productName": "nodepaper",
+  "version": "1.0.0",
+  "description": "My Electron application description",
+  "main": ".webpack/main",
+  "iohook": {
+    "targets": [
+      "node-83",
+      "electron-87"
+    ],
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ],
+    "arches": [
+      "x64",
+      "ia32"
+    ]
+  },
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": {
+    "name": "chad",
+    "email": "chadkoslovsky@gmail.com"
+  },
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "asar": {
+          "unpackDir": "{.webpack,node_modules/iohook,webpack.rules.js}"
+        }
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "nodepaper"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ],
+      "plugins": [
+        [
+          "@electron-forge/plugin-webpack",
+          {
+            "mainConfig": "./webpack.main.config.js",
+            "renderer": {
+              "config": "./webpack.renderer.config.js",
+              "entryPoints": [
+                {
+                  "html": "./src/index.html",
+                  "js": "./src/index.tsx",
+                  "name": "main_window"
+                },
+                {
+                  "html": "./src/wallpaper.html",
+                  "js": "./src/wp.tsx",
+                  "name": "wallpaper"
+                },
+                {
+                  "html": "./src/transparent.html",
+                  "js": "./src/child.tsx",
+                  "name": "child"
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.57",
+    "@electron-forge/maker-deb": "^6.0.0-beta.57",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.57",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.57",
+    "@electron-forge/maker-zip": "^6.0.0-beta.57",
+    "@electron-forge/plugin-webpack": "6.0.0-beta.57",
+    "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
+    "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
+    "@types/react-router-dom": "^5.1.7",
+    "autoprefixer": "^10.2.6",
+    "css-loader": "^5.0.0",
+    "electron": "12.0.12",
+    "fork-ts-checker-webpack-plugin": "^6.2.12",
+    "html-loader": "^2.1.2",
+    "mini-css-extract-plugin": "^1.6.1",
+    "node-loader": "^2.0.0",
+    "postcss": "^8.3.5",
+    "postcss-loader": "^6.1.0",
+    "postcss-scss": "^4.0.0",
+    "sass": "^1.35.1",
+    "sass-loader": "^12.1.0",
+    "style-loader": "^2.0.0",
+    "tailwindcss": "^2.2.4",
+    "ts-loader": "^9.2.3",
+    "typescript": "^4.3.4"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.3.3",
+    "@types/react": "^17.0.11",
+    "@types/react-dom": "^17.0.8",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-transparency-mouse-fix": "^1.0.0-rc.1",
+    "electron-wallpaper-napi": "^0.0.5",
+    "iohook": "^0.9.3",
+    "mouse-pressed": "^1.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "tailwindcss-pseudo-elements": "^2.0.0",
+    "tailwindcss-ripple": "^0.7.1"
+  }
+}

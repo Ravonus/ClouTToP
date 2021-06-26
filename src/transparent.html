@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    html,
+
+    body {
+      overflow: hidden;
+      margin: 0;
+      padding: 32px;
+      font-family: verdana;
+    }
+  </style>
+</head>
+<!-- handlers for supported mouse events on body -->
+
+<body class="enable-mouse selectable" id="child" onmouseup="onEvent('mouseUp', event)"
+  onmousedown="onEvent('mouseDown', event)" onmouseenter="onEvent('mouseEnter', event)"
+  onmouseleave="onEvent('mouseLeave', event)" onmousemove="onEvent('mouseMove', event)">
+
+  <script>
+
+    const { remote, ipcRenderer } = require('electron');
+    const { screen } = remote;
+    const displays = screen.getAllDisplays();
+    const body = document.body;
+
+    body.addEventListener('mouseUp', function (event) {
+
+      ipcRenderer.send('wpClick', { x: event.pageX, y: event.pageY })
+
+    }, false);
+
+    const getEventModifiers = evt => [
+      { field: 'ctrlKey', name: 'control' },
+      { field: 'shiftKey', name: 'shift' },
+      { field: 'altKey', name: 'alt' },
+      { field: 'metaKey', name: 'meta' }
+    ].filter(elm => evt[elm.field]).map(elm => elm.name);
+
+    const getEventButton = evt => {
+      switch (evt.button) {
+        case 2:
+          return 'right';
+        case 1:
+          return 'middle';
+        case 0:
+        default:
+          return 'left';
+      }
+    }
+
+    body.style.width = `${displays[0].size.width}px`
+    body.style.height = `${displays[0].size.height}px`
+
+    window.onEvent = function (type, evt) {
+      console.log("RAN")
+      // send the event to ipcMain
+      return ipcRenderer.send('wpClick', {
+        type,
+        modifiers: getEventModifiers(evt),
+        button: getEventButton(evt),
+        x: evt.clientX,
+        y: evt.clientY,
+        globalX: evt.screenX,
+        globalY: evt.screenY,
+        movementX: evt.movementX,
+        movementY: evt.movementY,
+        clickCount: evt.detail,
+      });
+    }
+  </script>
+</body>
+
+</html>
