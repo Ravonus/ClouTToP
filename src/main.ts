@@ -19,6 +19,7 @@ let mainWindow: any;
 const createWindow = () => {
   // Create the browser window.
   let mainWindow: null | BrowserWindow = new BrowserWindow({
+    frame: false,
     webPreferences: {
       nodeIntegrationInSubFrames: true,
       webviewTag: true,

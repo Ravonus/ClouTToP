@@ -11,6 +11,9 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import Main from './pages/main';
 
+import Menu from './components/menu';
+import Top from './components/topBar';
+
 //Import Styles
 //import './App.scss';
 
@@ -24,6 +27,8 @@ function App() {
   return (
     <div>
       <main className='relative'>
+        <Top />
+        <Menu />
         <div className='flex flex-col justify-between'>
           <div className='bg-gray-100 dark:bg-gray-500 h-screen'>
             <Router>
