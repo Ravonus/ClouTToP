@@ -1,12 +1,20 @@
+/**
+ * @author Chad Koslovsky <chad@technomnancy.it>
+ * @file Description
+ * @desc Created on 2021-06-26 9:16:31 pm
+ * @copyright TechnomancyIT
+ */
+
 import { app, BrowserWindow, ipcMain } from 'electron';
-import wallpaper from 'electron-wallpaper-napi';
-import mouseFix from 'electron-transparency-mouse-fix';
 
+//Local Modules
 import wp from './Wallpaper';
-
 import './ipc/store';
+import { loader } from './libs/plugins';
 
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
+
+loader();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {

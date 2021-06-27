@@ -9,7 +9,9 @@
 //Hooks
 
 const postPackage = require(`${__dirname}/postPackage.ts`);
+const generateAssets = require(`${__dirname}/preStart.ts`);
 
 module.exports = {
   postPackage,
+  generateAssets,
 };

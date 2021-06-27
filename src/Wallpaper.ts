@@ -1,3 +1,9 @@
+/**
+ * @author Chad Koslovsky <chad@technomnancy.it>
+ * @file Description
+ * @desc Created on 2021-06-26 10:46:56 pm
+ * @copyright TechnomancyIT
+ */
 import { BrowserWindow, screen, ipcMain } from 'electron';
 import path from 'path';
 import { render } from 'react-dom';

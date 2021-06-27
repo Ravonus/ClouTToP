@@ -17,7 +17,7 @@
 
 <body>
   <div id="wp"></div>
-  <webview id="foo" src="http://html5wallpaper.com/wp-depo/727/">
+  <webview id="foo" src="http://html5wallpaper.com/wallpaper/three-js-interactive-solar-system/">
     <div class="indicator"></div>
   </webview>
 
@@ -60,30 +60,17 @@
         function tester() {
           webview.sendInputEvent({ type: 'mouseDown', x: 1263, y: 730, button: 'left', clickCount: 100 });
         }
-
-
         setTimeout(() => {
 
           // webview.sendInputEvent({ type: 'mouseDown', x: 1263, y: 730, button: 'left', clickCount: 100 });
           // webview.sendInputEvent({ type: 'mouseUp', x: 1263, y: 730, button: 'left', clickCount: 1 });
-
-
           var b = document.body
-
           b.addEventListener('click', function (event) { console.log(event.pageX, event.pageY) }, false);
-
           //   webview.sendInputEvent({ type: 'mouseUp', x: 1263, y: 730, button: 'left', globalX: 1263, globalY: 730 });
           webview.insertBefore
-
         }, 5000);
-
-
-
       }
-
       console.log(displays[0].size.height)
-
-
       // webview.style.width = '1'
       webview.style.width = `${displays[0].size.width}px`
       webview.style.height = `${displays[0].size.height}px`

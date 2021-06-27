@@ -7,8 +7,8 @@
 
 var copyFiles = require('copy-dir');
 
-const path = require('path');
-const fs = require('fs');
+let path = require('path');
+let fs = require('fs');
 
 module.exports = async (forgeConfig, options) => {
   console.warn('\n\nprePackage: exclude files ...\n\n');

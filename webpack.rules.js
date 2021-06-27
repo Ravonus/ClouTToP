@@ -1,4 +1,5 @@
 const plugins = require('./webpack.plugins');
+const path = require('path');
 
 module.exports = [
   // Add support for native node modules
@@ -16,6 +17,7 @@ module.exports = [
       },
     },
   },
+
   {
     test: /.s?css$/,
     use: [
