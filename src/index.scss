@@ -3,13 +3,16 @@
 @tailwind utilities;
 
 $font-stack: Helvetica, sans-serif;
-$primary-color: #333;
-
+$primary-color: #00d612;
 body {
   font: 100% $font-stack;
-  background-color: $primary-color;
 }
 
 .draggable {
   -webkit-app-region: drag;
+}
+
+.filter-green {
+  filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg)
+    brightness(118%) contrast(119%);
 }

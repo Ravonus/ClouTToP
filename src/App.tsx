@@ -11,6 +11,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import Main from './pages/main';
 
+import Store from 'electron-store';
+
 import Menu from './components/menu';
 import Top from './components/topBar';
 
@@ -23,14 +25,25 @@ const routePages: { [key: string]: any } = {
   Main,
 };
 
+const store = new Store();
+
+const dm = store.get('darkmode');
+
 function App() {
+  const [darkmode, setDarkmode] = useState(dm || false);
+
+  function darkmodeCheck(value: boolean) {
+    console.log('I RUNZ TOO');
+    setDarkmode(value);
+  }
+
   return (
     <div>
-      <main className='relative'>
-        <Top />
+      <main className={`group relative ${darkmode ? 'dark' : ''}`}>
+        <Top darkmodeCheck={darkmodeCheck} />
         <Menu />
-        <div className='flex flex-col justify-between'>
-          <div className='bg-gray-100 dark:bg-gray-500 h-screen'>
+        <div className='h-screen bg-gray-200 dark:bg-gray-700 border-transparent group-hover:border-primary  group-focus:border-red-primary border'>
+          <div className='container pt-8'>
             <Router>
               {routes.map((link) => {
                 console.log(link, 'erg');

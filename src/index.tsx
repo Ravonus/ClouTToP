@@ -6,6 +6,4 @@ import App from './App';
 
 import './index.scss';
 
-console.log('THEY MY FRIENDS?');
-
 render(<App />, document.getElementById('root'));

@@ -115,7 +115,7 @@ module.exports = {
     },
     colors: {
       transparent: 'transparent',
-      primary: '#00AAFF',
+      primary: '#00d612',
       nav: '#333333',
       bg: '#F7F8FC',
       text: '#83929680',

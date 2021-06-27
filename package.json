@@ -33,63 +33,7 @@
   },
   "license": "MIT",
   "config": {
-    "forge": {
-      "packagerConfig": {
-        "asar": {
-          "unpackDir": "{.webpack,node_modules/iohook,webpack.rules.js}"
-        }
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "nodepaper"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "html": "./src/index.html",
-                  "js": "./src/index.tsx",
-                  "name": "main_window"
-                },
-                {
-                  "html": "./src/wallpaper.html",
-                  "js": "./src/wp.tsx",
-                  "name": "wallpaper"
-                },
-                {
-                  "html": "./src/transparent.html",
-                  "js": "./src/child.tsx",
-                  "name": "child"
-                }
-              ]
-            }
-          }
-        ]
-      ]
-    }
+    "forge": "./config/forge.config.ts"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.57",
@@ -102,8 +46,10 @@
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@types/react-router-dom": "^5.1.7",
     "autoprefixer": "^10.2.6",
+    "copy-dir": "^1.3.0",
     "css-loader": "^5.0.0",
     "electron": "12.0.12",
+    "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^6.2.12",
     "html-loader": "^2.1.2",
     "mini-css-extract-plugin": "^1.6.1",
@@ -126,7 +72,11 @@
     "@tailwindcss/forms": "^0.3.3",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.8",
+    "ajv": "^8.6.0",
+    "ajv-formats": "^2.1.0",
+    "copyfiles": "^2.4.1",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.0.0",
     "electron-transparency-mouse-fix": "^1.0.0-rc.1",
     "electron-wallpaper-napi": "^0.0.5",
     "iohook": "^0.9.3",
