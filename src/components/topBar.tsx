@@ -1,3 +1,5 @@
+//TODO: Add Settings to active side nav check.
+
 import { FC, useState } from 'react';
 import Store from 'electron-store';
 import { remote } from 'electron';
@@ -6,8 +8,10 @@ import Close from '../assets/icons/iconmonstr-x-mark-8.svg';
 import CloseThin from '../assets/icons/iconmonstr-x-mark-thin.svg';
 import Expand from '../assets/icons/iconmonstr-external-link-thin.svg';
 import Minimize from '../assets/icons/iconmonstr-minus-thin.svg';
-import LightOff from '../assets/icons/iconmonstr-light-bulb-17.svg';
-import LightOn from '../assets/icons/iconmonstr-light-bulb-12.svg';
+import LightOff from '../assets/icons/iconmonstr-light-bulb-12.svg';
+import LightOn from '../assets/icons/iconmonstr-light-bulb-17.svg';
+
+import { useHistory } from 'react-router-dom';
 
 const { BrowserWindow } = remote;
 
@@ -23,7 +27,10 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck }) => {
   const [darkmode, setDarkmode] = useState(store.get('darkmode') || false);
   const [width, setWidth] = useState(window.innerWidth);
 
+  console.log('HERSTORY', useHistory());
+
   if (firstRun) {
+    useHistory().push('/dashboard');
     setTimeout(() => {
       let element = document.querySelector('#darkmode > div');
 
@@ -34,6 +41,32 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck }) => {
 
     firstRun = false;
   }
+
+  const navButtons = document.querySelectorAll('.navButton');
+
+  navButtons.forEach((button) => {
+    const active = button.classList[1];
+    if (active)
+      button
+        .querySelector('div')
+        ?.classList.add(
+          'dark:bg-gray-700',
+          'bg-gray-200',
+          'border-l-200',
+          'dark:border-white',
+          'border-black'
+        );
+    else
+      button
+        .querySelector('div')
+        ?.classList.remove(
+          'dark:bg-gray-700',
+          'bg-gray-200',
+          'border-l-2',
+          'dark:border-white',
+          'border-black'
+        );
+  });
 
   window.addEventListener('resize', function (event) {
     let element = document.querySelector('#darkmode > div');

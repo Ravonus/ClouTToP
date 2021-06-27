@@ -6,4 +6,4 @@ import App from './App';
 
 import './index.scss';
 
-render(<App />, document.getElementById('root'));
+render(<App props={this} />, document.getElementById('root'));
