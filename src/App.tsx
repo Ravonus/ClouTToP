@@ -39,10 +39,10 @@ function App() {
 
   return (
     <div>
-      <main className={`group relative ${darkmode ? 'dark' : ''}`}>
+      <main className={`group ${darkmode ? 'dark' : ''}`}>
         <Top darkmodeCheck={darkmodeCheck} />
         <Menu />
-        <div className='h-screen bg-gray-200 dark:bg-gray-700 border-transparent group-hover:border-primary  group-focus:border-red-primary border'>
+        <div className='h-screen bg-gray-200 dark:bg-gray-700 border-transparent group-hover:border-primary border-2'>
           <div className='container pt-8'>
             <Router>
               {routes.map((link) => {
