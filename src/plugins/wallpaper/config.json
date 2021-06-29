@@ -8,7 +8,12 @@
   "style": {
     "filter": "invert(48%) sepia(29%) saturate(2476%) hue-rotate(190deg) brightness(118%) contrast(119%) drop-shadow(-0.5px -0.5px 0 black) drop-shadow(0.5px 0.5px 0 black)"
   },
-  "routes": ["plugins", "plugins_ARPaper", "plugins_ARPaper_scenes"],
+  "routes": [
+    "plugins",
+    "plugins_ARPaper",
+    "plugins_ARPaper_scenes",
+    "plugins_ARPaper_library"
+  ],
   "logo": "/icons/ARPaperLogo.png",
   "description": "Easy wallpaper plugin for ARScreenZ. You can load just about any item and create a scene specific for them.",
   "icons": {

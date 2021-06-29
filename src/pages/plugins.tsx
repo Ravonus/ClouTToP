@@ -91,7 +91,7 @@ const Plugins: FC<PluginsProps> = ({
           <NavLink
             id={opt.name}
             onClick={() => setPage(`plugins_${opt.name}`)}
-            className='navButton'
+            className='navButton pluginButton'
             to={`plugins_${opt.name}`}
           >
             <div
