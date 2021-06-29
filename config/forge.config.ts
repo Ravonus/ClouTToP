@@ -8,9 +8,9 @@
 module.exports = {
   hooks: 'require:./electronBuild/hooksController.ts',
   packagerConfig: {
-    asar: {
-      unpackDir: '{node_modules/iohook}',
-    },
+    // asar: {
+    //   unpackDir: '{node_modules/iohook,.webpack/plugins}',
+    // },
   },
   makers: [
     {

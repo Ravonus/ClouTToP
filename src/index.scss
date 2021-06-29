@@ -4,6 +4,7 @@
 
 $font-stack: Helvetica, sans-serif;
 $primary-color: #00d612;
+$secondary-color: #0099d6;
 body {
   font: 100% $font-stack;
 }
@@ -15,4 +16,21 @@ body {
 .filter-green {
   filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg)
     brightness(118%) contrast(119%);
+}
+
+.filter-green-shadow {
+  filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg)
+    drop-shadow(-0.5px -0.5px 0 black) drop-shadow(0.5px 0.5px 0 black)
+    brightness(118%) contrast(119%);
+}
+
+.filter-blue {
+  filter: invert(48%) sepia(29%) saturate(2476%) hue-rotate(190deg)
+    brightness(118%) contrast(119%);
+}
+
+.filter-blue-shadow {
+  filter: invert(48%) sepia(29%) saturate(2476%) hue-rotate(190deg)
+    brightness(118%) contrast(119%) drop-shadow(-0.5px -0.5px 0 black)
+    drop-shadow(0.5px 0.5px 0 black);
 }

@@ -20,8 +20,6 @@ module.exports = async (forgeConfig, options) => {
   );
   const ioHookDirectory = path.join(__dirname, '../', 'node_modules/iohook');
 
-  console.log(outDirectory, ioHookDirectory);
-
   if (!fs.existsSync(path.join(outDirectory, '../'))) {
     fs.mkdirSync(path.join(outDirectory, '../'));
   }

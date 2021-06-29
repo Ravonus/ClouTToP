@@ -17,14 +17,15 @@ const { BrowserWindow } = remote;
 
 interface TopProps {
   darkmodeCheck: Function;
+  darkmode: boolean;
+  setDarkmode: Function;
 }
 
 const store = new Store();
 
 let firstRun = true;
 
-const TopBar: FC<TopProps> = ({ darkmodeCheck }) => {
-  const [darkmode, setDarkmode] = useState(store.get('darkmode') || false);
+const TopBar: FC<TopProps> = ({ darkmodeCheck, darkmode, setDarkmode }) => {
   const [width, setWidth] = useState(window.innerWidth);
 
   console.log('HERSTORY', useHistory());
@@ -85,16 +86,16 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck }) => {
           width,
         }}
       ></div>
-      <span className='fixed left-8 text-gray-900 dark:text-gray-200'>
-        ARScreenz
+      <span className='fixed left-14 text-gray-900 dark:text-gray-200'>
+        ARScreenZ
       </span>
       <div
         onClick={() => BrowserWindow.getFocusedWindow()?.close()}
-        className='cursor-pointer hover:bg-red-500 dark:hover:bg-red-700 fixed top-0 right-0 text-center p-2 px-3 border-t-2 border-r-2 border-transparent hover:border-primary'
+        className='cursor-pointer hover:bg-red-500 dark:hover:bg-red-700 fixed top-0 right-0 text-center p-2 px-3'
       >
         <span className='color-gray-900 dark:color-gray-200 cursor-pointer text-center'>
           <img
-            className='filter-green'
+            className={`filter-${darkmode ? 'green' : 'blue'}`}
             style={{ width: 18, height: 18 }}
             src={Close}
             alt='X'
@@ -108,11 +109,11 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck }) => {
             isFullScreen ? false : true
           );
         }}
-        className='cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 fixed top-0 right-10 text-center p-2 px-3 border-t-2 border-transparent hover:border-primary'
+        className='cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 fixed top-0 right-10 text-center p-2 px-3'
       >
         <span className='cursor-pointer text-center'>
           <img
-            className='filter-green'
+            className={`filter-${darkmode ? 'green' : 'blue'}`}
             style={{ width: 18, height: 18 }}
             src={Expand}
             alt='[]'
@@ -121,11 +122,11 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck }) => {
       </div>
       <div
         onClick={() => BrowserWindow.getFocusedWindow()?.minimize()}
-        className='cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 fixed top-0 right-20 text-center p-2 px-3 border-t-2 border-transparent hover:border-primary'
+        className='cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 fixed top-0 right-20 text-center p-2 px-3'
       >
         <span className='cursor-pointer text-center'>
           <img
-            className='filter-green'
+            className={`filter-${darkmode ? 'green' : 'blue'}`}
             style={{ width: 18, height: 18 }}
             src={Minimize}
             alt='--'
@@ -144,11 +145,11 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck }) => {
         {darkmode ? (
           <div
             style={{ right: 115 }}
-            className='cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 fixed top-0 text-center p-2 px-3 border-t-2 border-transparent hover:border-primary'
+            className='cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 fixed top-0 text-center p-2 px-3'
           >
             <span className='cursor-pointer text-center'>
               <img
-                className='filter-green'
+                className={`filter-${darkmode ? 'green' : 'blue'}`}
                 style={{ width: 18, height: 18 }}
                 src={LightOff}
                 alt='--'
@@ -158,11 +159,11 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck }) => {
         ) : (
           <div
             style={{ right: 115 }}
-            className='cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 fixed top-0 text-center p-2 px-3 border-t-2 border-transparent hover:border-primary'
+            className='cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 fixed top-0 text-center p-2 px-3'
           >
             <span className='cursor-pointer text-center'>
               <img
-                className='filter-green'
+                className={`filter-${darkmode ? 'green' : 'blue'}`}
                 style={{ width: 18, height: 18 }}
                 src={LightOn}
                 alt='--'

@@ -8,12 +8,11 @@
  */
 
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   NavLink,
-  Redirect,
-  useHistory,
-  withRouter,
+  matchPath,
+  HashRouterProps,
 } from 'react-router-dom';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
@@ -25,10 +24,10 @@ import About from './pages/about';
 import Settings from './pages/settings';
 import Plugins from './pages/plugins';
 
-import Store from 'electron-store';
+import { loadStore } from './libs/store';
 
 //Components
-import Menu from './components/menu';
+import Menu from './components/sidebar';
 import Top from './components/topBar';
 
 //Icons
@@ -36,173 +35,323 @@ import PluginsIcon from './assets/icons/iconmonstr-brick-8.svg';
 import HelpIcon from './assets/icons/iconmonstr-help-1.svg';
 import AboutIcon from './assets/icons/iconmonstr-construction-8.svg';
 import DashboardIcon from './assets/icons/iconmonstr-dashboard-4.svg';
+import plugins from './pluginImporter';
 
 //Import Styles
 //import './App.scss';
 
-const routes = [
-  { name: 'Dashboard', link: '/dashboard', component: 'Dashboard' },
-  { name: 'Help', link: '/help', component: 'Help' },
-  { name: 'About', link: '/about' },
-  { name: 'Settings', link: '/settings' },
-  { name: 'Plugins', link: '/plugins' },
-];
+// const routes = [
+//   { name: 'Dashboard', link: '/dashboard', component: 'Dashboard' },
+//   { name: 'Help', link: '/help', component: 'Help' },
+//   { name: 'About', link: '/about' },
+//   { name: 'Settings', link: '/settings' },
+//   { name: 'Plugins', link: '/plugins' },
+// ];
 
-const routePages: { [key: string]: any } = {
-  Dashboard,
-  Help,
-  About,
-  Settings,
-  Plugins,
-};
+let routePages: { [key: string]: any } = {};
 
-const store = new Store();
+let setRoutePages: any;
 
-const dm = store.get('darkmode');
+const dm = loadStore('darkmode');
+
+function checkActive() {
+  const navButtons = document.querySelectorAll('.navButton');
+  navButtons.forEach((button) => {
+    const active = button.classList[1];
+    if (active)
+      button
+        .querySelector('div')
+        ?.classList.add(
+          'dark:bg-gray-700',
+          'bg-gray-200',
+          'border-l-4',
+          'hover:border-secondary',
+          'dark:hover:border-primary',
+          'dark:border-gray-300',
+          'border-black'
+        );
+    else
+      button
+        .querySelector('div')
+        ?.classList.remove(
+          'dark:bg-gray-700',
+          'bg-gray-200',
+          'border-l-4',
+          'hover:border-secondary',
+          'dark:hover:border-primary',
+          'dark:border-gray-300',
+          'border-black'
+        );
+  });
+}
 
 function App(props: any) {
   const [darkmode, setDarkmode] = useState(dm || false);
+  const [routesLoaded, setRoutesLoaded] = useState(['']);
   const [page, setPage] = useState('dashboard');
+  const [routes, setRoutes] = useState([
+    { name: 'Dashboard', link: '/dashboard', component: 'Dashboard' },
+    { name: 'Help', link: '/help', component: 'Help' },
+    { name: 'About', link: '/about' },
+    { name: 'Settings', link: '/settings' },
+    { name: 'Plugins', link: '/plugins' },
+  ]);
+  [routePages, setRoutePages] = useState({
+    Dashboard,
+    Help,
+    About,
+    Settings,
+    Plugins,
+  });
 
-  const menus = {
-    mainMenu: [
-      <NavLink
-        onClick={() => setPage('dashboard')}
-        className='navButton'
-        to='/dashboard'
-      >
-        <div
-          data-tip='Dashboard'
-          className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
-          style={{ width: 46, height: 34 }}
-        >
-          <ReactTooltip />
-          <img
-            className='filter-green ml-3 my-2 relative'
-            style={{ width: 24, height: 24, top: 5 }}
-            src={DashboardIcon}
-            alt='P'
-          />
-        </div>
-      </NavLink>,
-      <NavLink
-        onClick={() => setPage('plugins')}
-        className='navButton'
-        to='/plugins'
-      >
-        <div
-          data-tip='Plugins'
-          className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
-          style={{ width: 46, height: 34 }}
-        >
-          <ReactTooltip />
-          <img
-            className='filter-green ml-3 my-2 relative'
-            style={{ width: 24, height: 24, top: 5 }}
-            src={PluginsIcon}
-            alt='P'
-          />
-        </div>
-      </NavLink>,
-      <NavLink
-        onClick={() => setPage('about')}
-        className='navButton'
-        to='About'
-      >
-        <div
-          data-tip='About'
-          className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
-          style={{ width: 46, height: 34 }}
-        >
-          <ReactTooltip />
-          <img
-            className='filter-green ml-3 my-2 relative'
-            style={{ width: 24, height: 24, top: 5 }}
-            src={AboutIcon}
-            alt='A'
-          />
-        </div>
-      </NavLink>,
-      <NavLink onClick={() => setPage('help')} className='navButton' to='/help'>
-        <div
-          data-tip='Help'
-          className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
-          style={{ width: 46, height: 34 }}
-        >
-          <ReactTooltip />
-          <img
-            className='filter-green ml-3 my-2 relative'
-            style={{ width: 24, height: 24, top: 5 }}
-            src={HelpIcon}
-            alt='H'
-          />
-        </div>{' '}
-      </NavLink>,
-    ],
+  async function setRoute(value: any) {
+    routes.push({
+      name: value.name,
+      component: value.component,
+      link: value.path || value.link,
+    });
+    await setRoutes(routes);
+  }
+
+  async function setRoutePage(name: string, component: any) {
+    console.log('routesLoaded', routesLoaded, name);
+
+    if (routesLoaded.includes(name.toLocaleLowerCase())) {
+      return;
+    } else {
+      routePages[name] = component;
+      await setRoutePages(routePages);
+      routesLoaded.push(name.toLocaleLowerCase());
+      await setRoutesLoaded(routesLoaded);
+    }
+  }
+
+  async function sidebarCheck() {
+    const bmenu = menu;
+    await setMenu({ mainMenu: [], pluginMenu: [] });
+
+    setTimeout(() => {
+      setMenu(bmenu);
+    }, 50);
+  }
+
+  function mainMenuGenerator(swap?: boolean) {
+    return [
+      {
+        // routes: ['dashboard', 'help', 'plugins'],
+        el: (
+          <NavLink
+            onClick={() => setPage('dashboard')}
+            className='navButton'
+            to='/dashboard'
+          >
+            <div
+              id='DashboardButton'
+              data-tip='Dashboard'
+              className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
+              style={{ width: 46, height: 34 }}
+            >
+              <ReactTooltip />
+              <img
+                className={`filter-${
+                  darkmode && !swap
+                    ? 'green'
+                    : darkmode && swap
+                    ? 'blue'
+                    : !darkmode && !swap
+                    ? 'blue'
+                    : 'green'
+                }-shadow ml-3 my-2 relative`}
+                style={{ width: 24, height: 24, top: 5 }}
+                src={DashboardIcon}
+                alt='P'
+              />
+            </div>
+          </NavLink>
+        ),
+      },
+      {
+        el: (
+          <NavLink
+            onClick={() => setPage('plugins')}
+            className='navButton'
+            to='/plugins'
+          >
+            <div
+              id='PluginsButton'
+              data-tip='Plugins'
+              className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
+              style={{ width: 46, height: 34 }}
+            >
+              <ReactTooltip />
+              <img
+                className={`filter-${
+                  darkmode && !swap
+                    ? 'green'
+                    : darkmode && swap
+                    ? 'blue'
+                    : !darkmode && !swap
+                    ? 'blue'
+                    : 'green'
+                }-shadow ml-3 my-2 relative`}
+                style={{ width: 24, height: 24, top: 5 }}
+                src={PluginsIcon}
+                alt='P'
+              />
+            </div>
+          </NavLink>
+        ),
+      },
+      {
+        el: (
+          <NavLink
+            onClick={() => setPage('about')}
+            className='navButton'
+            to='About'
+          >
+            <div
+              data-tip='About'
+              className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
+              style={{ width: 46, height: 34 }}
+            >
+              <ReactTooltip />
+              <img
+                className={`filter-${
+                  darkmode && !swap
+                    ? 'green'
+                    : darkmode && swap
+                    ? 'blue'
+                    : !darkmode && !swap
+                    ? 'blue'
+                    : 'green'
+                }-shadow ml-3 my-2 relative`}
+                style={{ width: 24, height: 24, top: 5 }}
+                src={AboutIcon}
+                alt='A'
+              />
+            </div>
+          </NavLink>
+        ),
+      },
+      {
+        el: (
+          <NavLink
+            onClick={() => setPage('help')}
+            className='navButton'
+            to='/help'
+          >
+            <div
+              data-tip='Help'
+              className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
+              style={{ width: 46, height: 34 }}
+            >
+              <ReactTooltip />
+              <img
+                className={`filter-${
+                  darkmode && !swap
+                    ? 'green'
+                    : darkmode && swap
+                    ? 'blue'
+                    : !darkmode && !swap
+                    ? 'blue'
+                    : 'green'
+                }-shadow ml-3 my-2 relative`}
+                style={{ width: 24, height: 24, top: 5 }}
+                src={HelpIcon}
+                alt='H'
+              />
+            </div>{' '}
+          </NavLink>
+        ),
+      },
+    ];
+  }
+
+  const menus: any = {
+    mainMenu: mainMenuGenerator(),
+    pluginMenu: [],
   };
 
-  const [menu, setMenu] = useState(menus.mainMenu);
+  const [menu, setMenu] = useState(menus);
 
-  function darkmodeCheck(value: boolean) {
-    setDarkmode(value);
+  async function darkmodeCheck(value: boolean) {
+    await setDarkmode(value);
+
+    setMenu({ mainMenu: mainMenuGenerator(true), pluginMenu: menu.pluginMenu });
+  }
+
+  async function addPluginMenu(pluginMenu: any, id: string) {
+    let found = false;
+
+    console.log('IDDS', pluginMenu.el.props);
+
+    menu.pluginMenu.map((localMenu: any) => {
+      if (localMenu.name === pluginMenu.name) found = true;
+    });
+
+    if (found) return;
+
+    menu.pluginMenu.push(pluginMenu);
+    // menus.pluginMenu.push(pluginMenu);
+
+    setTimeout(() => {
+      if (menu.mainMenu.length > 0) setMenu(menu);
+      const el: any = document.querySelector('#DashboardButton');
+      if (el) el.click();
+
+      const elPlug: any = document.querySelector('#PluginsButton');
+      if (elPlug) elPlug.click();
+
+      const el2: any = document.querySelector(`#${pluginMenu.pluginName}`);
+      if (el2) el2.click();
+    }, 100);
   }
 
   useEffect(() => {
-    const navButtons = document.querySelectorAll('.navButton');
-    navButtons.forEach((button) => {
-      const active = button.classList[1];
-      if (active)
-        button
-          .querySelector('div')
-          ?.classList.add(
-            'dark:bg-gray-700',
-            'bg-gray-200',
-            'border-l-2',
-            'dark:border-white',
-            'border-black'
-          );
-      else
-        button
-          .querySelector('div')
-          ?.classList.remove(
-            'dark:bg-gray-700',
-            'bg-gray-200',
-            'border-l-2',
-            'dark:border-white',
-            'border-black'
-          );
-    });
+    checkActive();
   }, [page]);
+
+  const checkLoadedRoutes: string[] = [];
 
   return (
     <div>
-      <main className={`group ${darkmode ? 'dark' : ''}`}>
+      <main className={`${darkmode ? 'dark' : ''}`}>
         <Router>
-          <Top darkmodeCheck={darkmodeCheck} />
+          <Top
+            setDarkmode={setDarkmode}
+            darkmode={darkmode}
+            darkmodeCheck={darkmodeCheck}
+          />
 
-          <Menu buttons={menu} />
+          <Menu darkmode={darkmode} setPage={setPage} navInfo={menu} />
+
           <div className='h-screen bg-gray-200 dark:bg-gray-700 border-transparent group-hover:border-primary border-2'>
             <div className='container pt-8'>
               {routes.map((link) => {
+                if (checkLoadedRoutes.includes(link.link)) return;
+
+                checkLoadedRoutes.push(link.link);
+
                 const Component =
                   routePages[link.component ? link.component : link.name];
                 return (
-                  <Suspense
-                    key={`${link.name}-r`}
-                    fallback={<div className='h-screen'>terds</div>}
-                  >
-                    <Route
-                      render={(props) => {
-                        return (
-                          <>
-                            <Component {...props} />
-                          </>
-                        );
-                      }}
-                      path={link.link}
-                      exact
-                    />
-                  </Suspense>
+                  <Route
+                    key={link.name}
+                    render={(props) => {
+                      return (
+                        <Component
+                          sidebarCheck={sidebarCheck}
+                          setPage={setPage}
+                          addPluginMenu={addPluginMenu}
+                          setRoute={setRoute}
+                          setRoutePage={setRoutePage}
+                          {...props}
+                        />
+                      );
+                    }}
+                    path={link.link}
+                    exact
+                  />
                 );
               })}
             </div>

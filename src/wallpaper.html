@@ -47,10 +47,8 @@
         webview.openDevTools();
 
         ipcRenderer.on('some-name', (event, result) => {
-          console.log("NAME", result)
+
           const { x, y } = result;
-
-
 
           webview.sendInputEvent({ type: 'mouseDown', x, y, button: 'left', clickCount: 1 });
           webview.sendInputEvent({ type: 'mouseUp', x, y, button: 'left', clickCount: 1 });
@@ -70,7 +68,7 @@
           webview.insertBefore
         }, 5000);
       }
-      console.log(displays[0].size.height)
+
       // webview.style.width = '1'
       webview.style.width = `${displays[0].size.width}px`
       webview.style.height = `${displays[0].size.height}px`

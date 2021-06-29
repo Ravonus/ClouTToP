@@ -6,8 +6,6 @@
  */
 import { BrowserWindow, screen, ipcMain } from 'electron';
 import path from 'path';
-import { render } from 'react-dom';
-import React, { FC, useState } from 'react';
 import wallpaper from 'electron-wallpaper-napi';
 import globalKeys from 'iohook';
 
@@ -27,13 +25,21 @@ export default () => {
     },
     // fullscreen: true,
     type: 'desktop',
-    transparent: true,
+    transparent: false,
     frame: false,
   });
 
-  //mainWindow.webContents.openDevTools();
+  const cdir = path.join(__dirname, '../renderer/', 'child/');
 
-  // let dummyWindow: null | BrowserWindow = new BrowserWindow({
+  // setTimeout(() => {
+  //   child?.loadURL(`file://${cdir}index.html`);
+  // }, 20000);
+
+  // let child = new BrowserWindow({
+  //   type: 'desktop',
+  //   transparent: true,
+  //   frame: false,
+  //   fullscreen: true,
   //   webPreferences: {
   //     nodeIntegrationInSubFrames: true,
   //     webviewTag: true,
@@ -42,70 +48,17 @@ export default () => {
   //     contextIsolation: false,
   //     webSecurity: false,
   //   },
-
-  //   type: 'desktop',
-  //   fullscreen: true,
-  //   transparent: true,
-  //   frame: false,
   // });
 
-  const ddir = path.join(__dirname, '../renderer/', 'dummy/');
-  const cdir = path.join(__dirname, '../renderer/', 'child/');
+  // child.show();
 
-  // setTimeout(() => {
-  //   dummyWindow?.loadURL(`file://${ddir}index.html`);
-  // }, 2000);
+  mainWindow.setIgnoreMouseEvents(true);
 
-  // console.log('eek', ddir);
-
-  // dummyWindow.show();
-  // dummyWindow.moveTop();
-  // dummyWindow.setMinimizable(false);
-  // dummyWindow.setClosable(false);
-  // dummyWindow.setFocusable(true);
-  // dummyWindow.setResizable(false);
-  // dummyWindow.setVisibleOnAllWorkspaces(true);
-
-  // dummyWindow.setKiosk;
-
-  // dummyWindow.setIgnoreMouseEvents(true);
-
-  // dummyWindow.setAlwaysOnTop(true);
-
-  // dummyWindow.on('focus', () => {
-  //   dummyWindow?.moveTop();
-  // });
-
-  setTimeout(() => {
-    child?.loadURL(`file://${cdir}index.html`);
-  }, 20000);
-
-  let child = new BrowserWindow({
-    type: 'desktop',
-    transparent: true,
-    frame: false,
-    fullscreen: true,
-    webPreferences: {
-      nodeIntegrationInSubFrames: true,
-      webviewTag: true,
-      nodeIntegration: true,
-      enableRemoteModule: true,
-      contextIsolation: false,
-      webSecurity: false,
-    },
-  });
-
-  child.show();
-
-  child.setIgnoreMouseEvents(true, { forward: true });
-
-  //child.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   ipcMain.on('wpClick', (e, css) => {
     // console.log(mouse());
   });
-
-  // dummyWindow.webContents.openDevTools();
 
   const dir = path.join(__dirname, '../renderer/', 'wallpaper/');
 
@@ -115,14 +68,13 @@ export default () => {
 
   mainWindow.webContents.on('did-navigate', () => {
     setTimeout(() => {
-      console.log('RAN?');
       wallpaper.attachWindow(mainWindow);
     }, 100);
   });
 
-  globalKeys.on('mouseclick', (event: any) => {
-    console.log('ran', screen.getCursorScreenPoint(), event);
+  mainWindow?.loadURL(`file://${dir}index.html`);
 
+  globalKeys.on('mouseup', (event: any) => {
     if (event.button === 1)
       mainWindow?.webContents.send('some-name', screen.getCursorScreenPoint());
 
@@ -136,28 +88,11 @@ export default () => {
   });
 
   //Register and start hook
-  globalKeys.start();
+  globalKeys.start(false);
 
   // setTimeout(() => {
   //   wallpaper.attachWindow(mainWindow);
   // }, 5000);
   //wallpaper.attachWindow(mainWindow);
-
-  setTimeout(() => {
-    mainWindow?.loadURL(`file://${dir}index.html`);
-  }, 20000);
-
-  //mainWindow.webContents.openDevTools();
-
-  //mainWindow.setIgnoreMouseEvents(true);
-
-  // function terd() {
-  //   console.log(screen.getCursorScreenPoint());
-  //   mainWindow?.webContents.send('some-name', screen.getCursorScreenPoint());
-  //   setTimeout(() => {
-  //     terd();
-  //   }, 1000);
-  // }
-
-  // terd();
+  // mainWindow?.loadURL(`file://${dir}index.html`);
 };

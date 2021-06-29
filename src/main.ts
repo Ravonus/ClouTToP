@@ -6,6 +6,7 @@
  */
 
 import { app, BrowserWindow, ipcMain } from 'electron';
+import isDev from 'electron-is-dev';
 
 //Local Modules
 import wp from './Wallpaper';
@@ -37,6 +38,7 @@ const createWindow = () => {
       webviewTag: true,
       nodeIntegration: true,
       enableRemoteModule: true,
+      //webSecurity: false,
       contextIsolation: false,
     },
   });
@@ -51,7 +53,12 @@ const createWindow = () => {
     mainWindow = null;
   });
 
-  wp();
+  setTimeout(
+    () => {
+      wp();
+    },
+    isDev ? 40000 : 0
+  );
 };
 
 app.on('ready', createWindow);

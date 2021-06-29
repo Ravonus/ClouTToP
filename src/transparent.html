@@ -55,7 +55,7 @@
     body.style.height = `${displays[0].size.height}px`
 
     window.onEvent = function (type, evt) {
-      console.log("RAN")
+
       // send the event to ipcMain
       return ipcRenderer.send('wpClick', {
         type,

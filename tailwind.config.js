@@ -121,6 +121,7 @@ module.exports = {
       text: '#83929680',
       textNav: '#839296',
       primaryLight: '#3bf',
+      secondary: '#0099d6',
       accent: '#F7F8FC',
       black: colors.black,
       white: colors.white,

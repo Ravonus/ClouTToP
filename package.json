@@ -45,6 +45,7 @@
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@types/react-router-dom": "^5.1.7",
+    "@types/require-from-string": "^1.2.0",
     "autoprefixer": "^10.2.6",
     "copy-dir": "^1.3.0",
     "css-loader": "^5.0.0",
@@ -63,6 +64,7 @@
     "style-loader": "^2.0.0",
     "tailwindcss": "^2.2.4",
     "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
     "typescript": "^4.3.4"
   },
   "dependencies": {
@@ -78,11 +80,13 @@
     "ajv-keywords": "^5.0.0",
     "colors": "^1.4.0",
     "copyfiles": "^2.4.1",
+    "electron-is-dev": "^2.0.0",
     "electron-log": "^4.3.5",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.0.0",
     "electron-transparency-mouse-fix": "^1.0.0-rc.1",
     "electron-wallpaper-napi": "^0.0.5",
+    "html-webpack-plugin": "^5.3.2",
     "iohook": "^0.9.3",
     "logform": "^2.2.0",
     "mouse-pressed": "^1.0.0",
@@ -90,6 +94,7 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
     "react-tooltip": "^4.2.21",
+    "require-from-string": "^2.0.2",
     "tailwindcss-pseudo-elements": "^2.0.0",
     "tailwindcss-ripple": "^0.7.1"
   }
