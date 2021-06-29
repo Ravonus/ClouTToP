@@ -18,10 +18,9 @@ module.exports = async (forgeConfig, options) => {
   setTimeout(async () => {
     //fs.mkdirSync(path.join(webpackdir, '../'));
     //    fs.mkdirSync(path.join(webpackdir));
-
-    await copyDir.sync(
-      path.join(__dirname, '../', 'src/plugins/'),
-      path.join(__dirname, '../', 'plugins')
-    );
+    // await copyDir.sync(
+    //   path.join(__dirname, '../', 'src/plugins/'),
+    //   path.join(__dirname, '../', 'plugins')
+    // );
   }, 500);
 };

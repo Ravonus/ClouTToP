@@ -4,6 +4,7 @@
   "component": "WallpaperPage",
   "link": "wallpaper",
   "author": "Chad Koslovsky",
+  "mainProcess": "wallpaper.ts",
   "version": "0.0.1",
   "style": {
     "filter": "invert(48%) sepia(29%) saturate(2476%) hue-rotate(190deg) brightness(118%) contrast(119%) drop-shadow(-0.5px -0.5px 0 black) drop-shadow(0.5px 0.5px 0 black)"

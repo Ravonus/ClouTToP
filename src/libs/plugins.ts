@@ -4,10 +4,15 @@
  * @desc Created on 2021-06-26 9:17:34 pm
  * @copyright TechnomancyIT
  */
+
 import log from 'electron-log';
 import { loadStore, setStore, deleteStore } from './store';
 import path from 'path';
 import fs from 'fs';
+import requireFromString from 'require-from-string';
+import pluginsMainProcess from '../pluginMainImporter';
+
+const pluginMain: any = pluginsMainProcess;
 
 const pluginLocation = loadStore('pluginLocation');
 const pluginDirectory =
@@ -20,7 +25,7 @@ export function loader() {
   //Developer option to delete store to test.
   deleteStore('plugins');
   log.info('Plugin loader started');
-  let plugins: string[];
+  let plugins: any[];
   try {
     plugins = [...loadStore('plugins')];
   } catch (e) {
@@ -47,6 +52,18 @@ export function loader() {
         plugins.push({ ...JSON.parse(config), path: myPluginDirecotry });
       } else
         log.error(`Could not find plugin configuration file for ${plugin}.`);
+    });
+
+    plugins.map((plugin: any) => {
+      if (plugin.mainProcess) {
+        //   pluginMain[plugin.mainProcess];
+        // const file = fs.readFileSync(
+        //   path.resolve(`${plugin.path}/${plugin.mainProcess}`),
+        //   'utf-8'
+        // );
+        // //equire(path.resolve(`${plugin.path}/${plugin.mainProcess}`));
+        // requireFromString(file);
+      }
     });
 
     setStore('plugins', plugins);

@@ -58,7 +58,8 @@ const dm = loadStore('darkmode');
 function checkActive() {
   const navButtons = document.querySelectorAll('.navButton');
   navButtons.forEach((button) => {
-    const active = button.classList[1];
+    const classList = button.classList;
+    const active = [...classList].includes('active');
     if (active)
       button
         .querySelector('div')
@@ -370,6 +371,7 @@ function App(props: any) {
                     render={(props) => {
                       return (
                         <Component
+                          checkActive={checkActive}
                           sidebarCheck={sidebarCheck}
                           setPage={setPage}
                           addPluginMenu={addPluginMenu}

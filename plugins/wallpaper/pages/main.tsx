@@ -3,8 +3,13 @@ import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
+// //Database models
+// import Library from '../models/Library';
+
 import Scenes from './scenes';
-import Library from './library';
+import LibraryPage from './library';
+import log from 'electron-log';
+import { ipcRenderer } from 'electron';
 
 export const ScenesIcon = require('../assets/icons/iconmonstr-computer-2.svg');
 export const LibraryIcon = require('../assets/icons/iconmonstr-layer-22.svg');
@@ -91,20 +96,31 @@ const Main: FC<MainProps> = ({
     },
   ];
 
-  addPluginMenu(menu[1], 'plugins_ARPaper_library');
-  addPluginMenu(menu[0], 'plugins_ARPaper_scenes');
-  setRoutePage('Scenes', Scenes);
-  setRoutePage('Library', Library);
-  setRoute({
-    name: 'library',
-    path: '/plugins_ARPaper_library',
-    component: 'Library',
-  });
-  setRoute({
-    name: 'scenes',
-    path: '/plugins_ARPaper_scenes',
-    component: 'Scenes',
-  });
+  useEffect(() => {
+    console.log('LOOKUP TEST');
+    (async () => {
+      const result = await ipcRenderer.invoke('database', {
+        type: 'read',
+        model: 'Library',
+      });
+      console.log(result);
+    })();
+
+    addPluginMenu(menu[1], 'plugins_ARPaper_library');
+    addPluginMenu(menu[0], 'plugins_ARPaper_scenes');
+    setRoutePage('Scenes', Scenes);
+    setRoutePage('Library', LibraryPage);
+    setRoute({
+      name: 'library',
+      path: '/plugins_ARPaper_library',
+      component: 'Library',
+    });
+    setRoute({
+      name: 'scenes',
+      path: '/plugins_ARPaper_scenes',
+      component: 'Scenes',
+    });
+  }, []);
 
   return (
     <div className='text-center l flex flex-col justify justify-center dark:text-primary'>

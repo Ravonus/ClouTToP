@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+  externals: ['sqlite3', 'iohook'],
   hooks: 'require:./electronBuild/hooksController.ts',
   packagerConfig: {
     // asar: {
