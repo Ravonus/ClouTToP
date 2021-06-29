@@ -12,6 +12,7 @@ import isDev from 'electron-is-dev';
 import wp from './Wallpaper';
 import './ipc/store';
 import { loader } from './libs/plugins';
+import { wait } from './functions/wait';
 
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -44,22 +45,24 @@ const createWindow = () => {
   });
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-  mainWindow.webContents.openDevTools();
+  mainWindow.hide();
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 
+  mainWindow.webContents.on('did-finish-load', function () {
+    mainWindow?.show();
+    wp();
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
-
-  setTimeout(
-    () => {
-      wp();
-    },
-    isDev ? 40000 : 0
-  );
 };
+
+app.on('will-finish-launching', () => {
+  //  mainWindow?.show();
+});
 
 app.on('ready', createWindow);
 
