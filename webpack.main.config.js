@@ -4,6 +4,9 @@
  * @desc Created on 2021-06-26 2:06:44 pm
  * @copyright TechnomancyIT
  */
+
+const nodeExternals = require('webpack-node-externals');
+
 module.exports = {
   /**
    * This is the main entry point for your application, it's the first file
@@ -15,10 +18,11 @@ module.exports = {
   module: {
     rules: require('./webpack.rules'),
   },
+
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.html'],
   },
-  externals: {
-    iohook: 'iohook',
-  },
+  externals: [
+    nodeExternals({ modulesFromFile: true, externalsPresets: { node: true } }),
+  ],
 };

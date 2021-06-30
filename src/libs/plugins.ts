@@ -6,28 +6,35 @@
  */
 
 import log from 'electron-log';
-import { loadStore, setStore, deleteStore } from './store';
 import path from 'path';
 import fs from 'fs';
+import { createConfig, getConfig, deleteConfig } from './configurator';
+
 import requireFromString from 'require-from-string';
 import pluginsMainProcess from '../pluginMainImporter';
 
 const pluginMain: any = pluginsMainProcess;
 
-const pluginLocation = loadStore('pluginLocation');
-const pluginDirectory =
-  pluginLocation || path.join(__dirname, '../../', 'plugins');
-
-const pluginFileList = fs.readdirSync(pluginDirectory);
 // .map((fileList) => fileList.substr(0, fileList.length - 3));
 
-export function loader() {
+export async function loader() {
+  const pluginLocation = await getConfig(
+    'application',
+    'plugins',
+    'pluginLocation'
+  );
+
+  const pluginDirectory =
+    pluginLocation || path.join(__dirname, '../../', 'plugins');
+
+  const pluginFileList = fs.readdirSync(pluginDirectory);
+
   //Developer option to delete store to test.
-  deleteStore('plugins');
+  deleteConfig('plugins', 'pluginLocation');
   log.info('Plugin loader started');
   let plugins: any[];
   try {
-    plugins = [...loadStore('plugins')];
+    plugins = [...(await getConfig('application', 'plugins', 'list'))];
   } catch (e) {
     plugins = [];
   }
@@ -44,6 +51,7 @@ export function loader() {
 
       let myPluginDirecotry = `${pluginDirectory}/${plugin}`;
       log.info('PLGS', myPluginDirecotry);
+
       let config;
       try {
         config = fs.readFileSync(`${myPluginDirecotry}/config.json`, 'utf-8');
@@ -57,15 +65,29 @@ export function loader() {
     plugins.map((plugin: any) => {
       if (plugin.mainProcess) {
         //   pluginMain[plugin.mainProcess];
-        // const file = fs.readFileSync(
+        // let file = fs.readFileSync(
         //   path.resolve(`${plugin.path}/${plugin.mainProcess}`),
         //   'utf-8'
         // );
-        // //equire(path.resolve(`${plugin.path}/${plugin.mainProcess}`));
-        // requireFromString(file);
+        // // file.replace(/require\([^)]+/g, '')
+
+        // const matches = file.match(/require\([^)]+/g);
+
+        // matches?.forEach((match) => {
+        //   file = file.replace(
+        //     /require\([^)]+/g,
+        //     match.replace('__dirname', plugin.path.replace(/\\/g, '/'))
+        //   );
+        // });
+
+        //     require(`${myPluginDirecotry}/${plugin.mainProcess}`);
+        // require(path.resolve(`${plugin.path}/${plugin.mainProcess}`));
+        try {
+          //   requireFromString(file);
+        } catch (e) {}
       }
     });
 
-    setStore('plugins', plugins);
+    createConfig('application', 'plugins', { list: plugins });
   }
 }

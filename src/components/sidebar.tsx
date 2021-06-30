@@ -1,4 +1,4 @@
-import React, { FC, DetailedHTMLProps } from 'react';
+import React, { FC, DetailedHTMLProps, useEffect } from 'react';
 
 import { NavLink, useHistory } from 'react-router-dom';
 
@@ -6,8 +6,6 @@ import SettingsIcon from '../assets/icons/iconmonstr-gear-11.svg';
 
 import ReactTooltip from 'react-tooltip';
 import { useState } from 'react';
-import { loadStore } from '../libs/store';
-
 interface MenuProps {
   navInfo: DetailedHTMLProps<any, any> | DetailedHTMLProps<any, any>[];
   setPage: Function;
@@ -16,6 +14,11 @@ interface MenuProps {
 
 const Menu: FC<MenuProps> = ({ navInfo, setPage, darkmode }) => {
   if (!Array.isArray(navInfo.mainMenu)) navInfo.mainMenu = [navInfo.mainMenu];
+  const [dm, setDm] = useState(darkmode);
+
+  useEffect(() => {
+    setDm(darkmode);
+  }, [darkmode]);
 
   const history = useHistory();
 
@@ -100,7 +103,7 @@ const Menu: FC<MenuProps> = ({ navInfo, setPage, darkmode }) => {
             <ReactTooltip />
             <img
               className={`filter-${
-                darkmode ? 'green' : 'blue'
+                dm ? 'green' : 'blue'
               }-shadow ml-3 my-2 relative`}
               style={{ width: 24, height: 24, top: 5 }}
               src={SettingsIcon}

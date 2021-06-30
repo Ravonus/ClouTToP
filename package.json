@@ -46,6 +46,7 @@
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@types/better-sqlite3": "^5.4.2",
     "@types/node": "^15.12.5",
+    "@types/node-ipc": "^9.1.4",
     "@types/react-router-dom": "^5.1.7",
     "@types/require-from-string": "^1.2.0",
     "@types/validator": "^13.1.4",
@@ -90,11 +91,13 @@
     "electron-store": "^8.0.0",
     "electron-transparency-mouse-fix": "^1.0.0-rc.1",
     "electron-wallpaper-napi": "^0.0.5",
+    "events": "^3.3.0",
     "html-webpack-plugin": "^5.3.2",
     "iohook": "^0.9.3",
     "is-electron-renderer": "^2.0.1",
     "logform": "^2.2.0",
     "mouse-pressed": "^1.0.0",
+    "node-ipc": "^9.1.4",
     "pg-hstore": "^2.3.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -106,6 +109,7 @@
     "sequelize-typescript": "^2.1.0",
     "sqlite3": "5.0.0",
     "tailwindcss-pseudo-elements": "^2.0.0",
-    "tailwindcss-ripple": "^0.7.1"
+    "tailwindcss-ripple": "^0.7.1",
+    "webpack-node-externals": "^3.0.0"
   }
 }

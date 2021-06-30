@@ -11,6 +11,7 @@ import isDev from 'electron-is-dev';
 //Local Modules
 import wp from './Wallpaper';
 import db from './ipc/database';
+import ipc from './libs/node-ipc';
 import { loader } from './libs/plugins';
 import { wait } from './functions';
 
@@ -25,6 +26,7 @@ declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
 loader();
 
 db;
+ipc;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {

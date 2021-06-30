@@ -16,19 +16,51 @@ module.exports = async (forgeConfig, options) => {
   const outDirectory = path.join(
     __dirname,
     '../',
-    'out/nodepaper-win32-x64/resources/node_modules/iohook'
+    'out/nodepaper-win32-x64/resources/node_modules/'
   );
-  const ioHookDirectory = path.join(__dirname, '../', 'node_modules/iohook');
+  const directory = path.join(__dirname, '../', 'node_modules');
+  // const sqlite3Directory = path.join(__dirname, '../', 'node_modules/sqlite3');
+  // const sequelizeDirectory = path.join(
+  //   __dirname,
+  //   '../',
+  //   'node_modules/sequelize'
+  // );
+  // const retryDirectory = path.join(
+  //   __dirname,
+  //   '../',
+  //   'node_modules/retry-as-promised'
+  // );
 
-  if (!fs.existsSync(path.join(outDirectory, '../'))) {
-    fs.mkdirSync(path.join(outDirectory, '../'));
-  }
+  // if (!fs.existsSync(path.join(outDirectory))) {
+  //   fs.mkdirSync(path.join(outDirectory));
+  // }
 
-  if (!fs.existsSync(outDirectory)) {
-    fs.mkdirSync(outDirectory);
-  }
+  // if (!fs.existsSync(`${outDirectory}retry-as-promised`)) {
+  //   fs.mkdirSync(`${outDirectory}retry-as-promised`);
+  // }
 
-  copyFiles(ioHookDirectory, outDirectory, (err, opt) => {
+  // if (!fs.existsSync(`${outDirectory}iohook`)) {
+  //   fs.mkdirSync(`${outDirectory}iohook`);
+  // }
+
+  // if (!fs.existsSync(`${outDirectory}sequelize`)) {
+  //   fs.mkdirSync(`${outDirectory}sequelize`);
+  // }
+
+  // if (!fs.existsSync(`${outDirectory}sqlite3`)) {
+  //   fs.mkdirSync(`${outDirectory}sqlite3`);
+
+  copyFiles(directory, outDirectory, (err, opt) => {
     console.log(err, opt);
   });
+
+  // copyFiles(ioHookDirectory, `${outDirectory}iohook`, (err, opt) => {
+  //   console.log(err, opt);
+  // });
+  // copyFiles(sqlite3Directory, `${outDirectory}sequelize`, (err, opt) => {
+  //   console.log(err, opt);
+  // });
+  // copyFiles(sequelizeDirectory, `${outDirectory}sequelize`, (err, opt) => {
+  //   console.log(err, opt);
+  // });
 };

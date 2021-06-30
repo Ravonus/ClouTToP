@@ -1,7 +1,6 @@
 //TODO: Add Settings to active side nav check.
 
 import { FC, useState } from 'react';
-import Store from 'electron-store';
 import { remote } from 'electron';
 
 import Close from '../assets/icons/iconmonstr-x-mark-8.svg';
@@ -12,6 +11,7 @@ import LightOff from '../assets/icons/iconmonstr-light-bulb-12.svg';
 import LightOn from '../assets/icons/iconmonstr-light-bulb-17.svg';
 
 import { useHistory } from 'react-router-dom';
+import { updateConfig } from '../libs/configurator';
 
 const { BrowserWindow } = remote;
 
@@ -20,8 +20,6 @@ interface TopProps {
   darkmode: boolean;
   setDarkmode: Function;
 }
-
-const store = new Store();
 
 let firstRun = true;
 
@@ -138,7 +136,7 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck, darkmode, setDarkmode }) => {
         onClick={() => {
           const dm = darkmode ? false : true;
           setDarkmode(dm);
-          store.set('darkmode', dm);
+          updateConfig('main', { darkmode: dm });
           darkmodeCheck(dm);
         }}
       >

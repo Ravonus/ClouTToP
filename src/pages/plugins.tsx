@@ -10,11 +10,12 @@ import {
   useHistory,
 } from 'react-router-dom';
 import { useState } from 'react';
-import { loadStore } from '../libs/store';
+
+import { getConfig } from '../libs/configurator';
 
 import requireFromString from 'require-from-string';
 
-import Card from '../components/card';
+import Card from '../components/cards/PluginCard';
 
 import p from '../pluginImporter';
 import { Suspense } from 'react';
@@ -69,9 +70,16 @@ const Plugins: FC<PluginsProps> = ({
   addPluginMenu,
   setPage,
 }) => {
-  const [plugins, setPlugins] = useState(loadStore('plugins'));
+  const [plugins, setPlugins] = useState([]);
 
   const history = useHistory();
+
+  useEffect(() => {
+    (async () => {
+      const foundPlugins = await getConfig('application', 'plugins', 'list');
+      if (foundPlugins) setPlugins(foundPlugins);
+    })();
+  }, []);
 
   useEffect(() => {
     if (!firstRun) return;

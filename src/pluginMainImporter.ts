@@ -10,5 +10,5 @@
 import WallpaperMainProcess from '../plugins/wallpaper/ARPaper';
 
 export default {
-  'wallpaper.ts': WallpaperMainProcess,
+  'ARPaper.ts': WallpaperMainProcess,
 };

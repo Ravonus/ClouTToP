@@ -1,4 +1,3 @@
-import { Optional } from 'sequelize';
 /**
  * @author Chad Koslovsky
  * @email Chad@technomancy.it
@@ -9,6 +8,8 @@ import { Optional } from 'sequelize';
  *        If imported directly from this file Typing will work and let you know the database columns that are accepted. ]
  * @return {Model Instance} This return the Library Instance. You may Create/Delete/Update/Find Librarys from postgress.
  */
+
+import { Optional } from 'sequelize';
 
 import {
   Table,
@@ -21,7 +22,7 @@ import {
 
 // Library functions
 
-interface LibraryAttributes {
+export interface LibraryAttributes {
   id: number;
   type: 'html5' | 'video' | 'picture';
   extra?: Object;

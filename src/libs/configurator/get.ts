@@ -15,9 +15,7 @@ export async function getConfig(
   name: string,
   values: string | string[]
 ) {
-  console.log('IS', isRenderer);
   if (!isRenderer) {
-    console.log('THIS IS RUNNING');
     const settings = await Setting.findOne({
       attributes: { include: ['values'] },
       where: { type, name },
@@ -25,7 +23,7 @@ export async function getConfig(
       log.error(e);
     });
 
-    console.log('SET', settings);
+    if (!settings) return undefined;
 
     const foundValues: any = settings?.values;
 

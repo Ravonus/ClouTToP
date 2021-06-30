@@ -3,14 +3,14 @@ import { useHistory } from 'react-router-dom';
 
 import Plugins from '../assets/icons/iconmonstr-brick-8.svg';
 
-import { OptionType } from '../pages/plugins';
+import { OptionType } from '../../pages/plugins';
 
 interface CardProps {
   opt: OptionType;
   sidebarCheck: Function;
 }
 
-const Card: FC<CardProps> = ({ opt, sidebarCheck }) => {
+export const PluginCard: FC<CardProps> = ({ opt, sidebarCheck }) => {
   const history = useHistory();
   return (
     <div
@@ -88,4 +88,4 @@ const Card: FC<CardProps> = ({ opt, sidebarCheck }) => {
   );
 };
 
-export default Card;
+export default PluginCard;

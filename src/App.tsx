@@ -24,8 +24,6 @@ import About from './pages/about';
 import Settings from './pages/settings';
 import Plugins from './pages/plugins';
 
-import { loadStore } from './libs/store';
-
 //Components
 import Menu from './components/sidebar';
 import Top from './components/topBar';
@@ -103,6 +101,7 @@ function App(props: any) {
   const [darkmode, setDarkmode] = useState(false);
   const [routesLoaded, setRoutesLoaded] = useState(['']);
   const [page, setPage] = useState('dashboard');
+  const [dbLoaded, setDbLoaded] = useState(false);
   const [routes, setRoutes] = useState([
     { name: 'Dashboard', link: '/dashboard', component: 'Dashboard' },
     { name: 'Help', link: '/help', component: 'Help' },
@@ -316,8 +315,6 @@ function App(props: any) {
 
   async function darkmodeCheck(value: boolean) {
     await setDarkmode(value);
-
-    setMenu({ mainMenu: mainMenuGenerator(true), pluginMenu: menu.pluginMenu });
   }
 
   async function addPluginMenu(pluginMenu: any, id: string) {
@@ -343,6 +340,13 @@ function App(props: any) {
     const el2: any = document.querySelector(`#${pluginMenu.pluginName}`);
     if (el2) el2.click();
   }
+
+  useEffect(() => {
+    setMenu({
+      mainMenu: mainMenuGenerator(false),
+      pluginMenu: menu.pluginMenu,
+    });
+  }, [darkmode]);
 
   useEffect(() => {
     checkActive();
