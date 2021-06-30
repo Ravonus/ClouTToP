@@ -2083,6 +2083,13 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
+electron-first-run@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/electron-first-run/-/electron-first-run-3.0.0.tgz#2227d9c3e5e41ee869accdb854ae2c14dcdd42a5"
+  integrity sha512-+GV8XX3vtVE9r+yuASNxsXm3FErdUnJAle4nvzBOPlEKT4Nuj044s3hgXkZh3aMupyMMYrNT+y4HVDUTOUABeg==
+  dependencies:
+    make-dir "^3.0.0"
+
 electron-installer-common@^0.10.2:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/electron-installer-common/-/electron-installer-common-0.10.3.tgz#40f9db644ca60eb28673d545b67ee0113aef4444"
@@ -3490,6 +3497,11 @@ is-docker@^2.0.0, is-docker@^2.1.1:
   resolved "https://registry.yarnpkg.com/is-docker/-/is-docker-2.2.1.tgz#33eeabe23cfe86f14bde4408a02c0cfb853acdaa"
   integrity sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ==
 
+is-electron-renderer@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/is-electron-renderer/-/is-electron-renderer-2.0.1.tgz#a469d056f975697c58c98c6023eb0aa79af895a2"
+  integrity sha1-pGnQVvl1aXxYyYxgI+sKp5r4laI=
+
 is-extglob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/is-extglob/-/is-extglob-2.1.1.tgz#a88c02535791f02ed37c76a1b9ea9773c833f8c2"
@@ -3990,7 +4002,7 @@ lzma-native@^6.0.1:
     readable-stream "^2.3.5"
     rimraf "^2.7.1"
 
-make-dir@^3.0.2:
+make-dir@^3.0.0, make-dir@^3.0.2:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-3.1.0.tgz#415e967046b3a7f1d185277d84aa58203726a13f"
   integrity sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==

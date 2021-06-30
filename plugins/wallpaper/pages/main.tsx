@@ -97,15 +97,6 @@ const Main: FC<MainProps> = ({
   ];
 
   useEffect(() => {
-    console.log('LOOKUP TEST');
-    (async () => {
-      const result = await ipcRenderer.invoke('database', {
-        type: 'read',
-        model: 'Library',
-      });
-      console.log(result);
-    })();
-
     addPluginMenu(menu[1], 'plugins_ARPaper_library');
     addPluginMenu(menu[0], 'plugins_ARPaper_scenes');
     setRoutePage('Scenes', Scenes);

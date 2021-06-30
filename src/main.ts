@@ -12,7 +12,7 @@ import isDev from 'electron-is-dev';
 import wp from './Wallpaper';
 import db from './ipc/database';
 import { loader } from './libs/plugins';
-import { wait } from './functions/wait';
+import { wait } from './functions';
 
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
 

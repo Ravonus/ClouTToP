@@ -36,7 +36,7 @@ import HelpIcon from './assets/icons/iconmonstr-help-1.svg';
 import AboutIcon from './assets/icons/iconmonstr-construction-8.svg';
 import DashboardIcon from './assets/icons/iconmonstr-dashboard-4.svg';
 import plugins from './pluginImporter';
-import { wait } from './functions/wait';
+import { wait } from './functions';
 
 //Import Styles
 //import './App.scss';
@@ -55,7 +55,7 @@ let setRoutePages: any;
 
 const dm = loadStore('darkmode');
 
-function checkActive() {
+async function checkActive() {
   const navButtons = document.querySelectorAll('.navButton');
   navButtons.forEach((button) => {
     const classList = button.classList;

@@ -9,9 +9,11 @@ console.log(' I AM WALL PAPER', 'ROARK');
 
 import WallpaperPage from './pages/main';
 
-// import { sequelize, addModels } from '../../src/libs/database';
+import { sequelize, addModels } from '../../src/libs/database';
 
 // import Library from './models/Library';
+
+console.log(sequelize.models.Setting);
 
 // (async () => {
 //   await addModels([Library]);

@@ -7,7 +7,7 @@
 
 //TODO: I need to make a system that actually generates this file based on plugins that are turned on. (This way typescript can access the files correctly) - Once this is done an API way to grab each of these files as well so you can access them from eachother.
 
-import WallpaperPage from '../plugins/wallpaper/wallpaper';
+import WallpaperPage from '../plugins/wallpaper/pages/main';
 
 const plugins = {
   WallpaperPage,

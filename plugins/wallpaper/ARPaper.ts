@@ -10,22 +10,25 @@ import WallpaperPage from './pages/main';
 import { sequelize, addModels } from '../../src/libs/database';
 
 import Library from './models/Library';
+import Setting from '../../src/models/Setting';
 
 (async () => {
-  await addModels([Library]);
+  // await addModels([Library]);
 
-  const created = await Library.create({
-    type: 'html5',
-    path: 'http://html5.com',
-    title: 'My Html5 video',
-    description: 'This is the video',
-  }).catch((e) => {
-    console.log(e);
-  });
+  console.log(Setting);
 
-  const libList = await Library.findAll();
+  // const created = await Library.create({
+  //   type: 'html5',
+  //   path: 'http://html5.com',
+  //   title: 'My Html5 video',
+  //   description: 'This is the video',
+  // }).catch((e) => {
+  //   console.log(e);
+  // });
 
-  console.log(libList);
+  // const libList = await Library.findAll();
+
+  // console.log(libList);
 })();
 
 export default WallpaperPage;

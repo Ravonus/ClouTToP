@@ -11,9 +11,10 @@ import eLogger from 'electron-log';
 
 import path from 'path';
 
-console.log('DATABASE DOES RUN');
 //Local
-// import User from '../models/User';
+import Setting from '../models/Setting';
+
+import dbSetup from '../config/databaseSetup';
 
 //import setup from '../setup/db';
 
@@ -29,9 +30,9 @@ const sequelize = new Sequelize('ARScreenz', 'ARUser', 'randompassword', {
   logging: console.log,
 });
 
-//sequelize.addModels([path.join(__dirname, '../', 'models/')]);
+sequelize.addModels([Setting]);
 
-eLogger.debug('IS THIS WORKING?');
+//sequelize.addModels([path.join(__dirname, '../', 'models/')]);
 
 export async function waitForModels() {
   await sequelize.sync();
@@ -43,5 +44,7 @@ export async function addModels(models: any[]) {
   sequelize.addModels(models);
   await sequelize.sync();
 }
+
+dbSetup();
 
 export { sequelize };
