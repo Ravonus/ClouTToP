@@ -25,7 +25,7 @@ export default async () => {
   console.log(darkmode);
 
   const updated = await updateConfig('main', {
-    darkmode: false,
+    darkmode: true,
   });
 
   console.log(updated);

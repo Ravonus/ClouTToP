@@ -37,6 +37,7 @@ import AboutIcon from './assets/icons/iconmonstr-construction-8.svg';
 import DashboardIcon from './assets/icons/iconmonstr-dashboard-4.svg';
 import plugins from './pluginImporter';
 import { wait } from './functions';
+import { getConfig } from './libs/configurator';
 
 //Import Styles
 //import './App.scss';
@@ -52,8 +53,6 @@ import { wait } from './functions';
 let routePages: { [key: string]: any } = {};
 
 let setRoutePages: any;
-
-const dm = loadStore('darkmode');
 
 async function checkActive() {
   const navButtons = document.querySelectorAll('.navButton');
@@ -101,7 +100,7 @@ async function waitForNavigation(type: 'id' | 'class', id: string) {
 }
 
 function App(props: any) {
-  const [darkmode, setDarkmode] = useState(dm || false);
+  const [darkmode, setDarkmode] = useState(false);
   const [routesLoaded, setRoutesLoaded] = useState(['']);
   const [page, setPage] = useState('dashboard');
   const [routes, setRoutes] = useState([
@@ -151,6 +150,9 @@ function App(props: any) {
 
   useEffect(() => {
     (async () => {
+      const dm: any = await getConfig('application', 'main', 'darkmode');
+      console.log('THE WOOTEST OF ALL WOOTEST', dm);
+      setDarkmode(dm);
       const pluginButton: any = await waitForNavigation('id', 'PluginsButton');
       pluginButton?.click();
       //TODO: Need a way to not keep waiting if user has no plugins (Would be odd as the app does nothing without plugins)

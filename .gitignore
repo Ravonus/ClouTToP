@@ -1,3 +1,6 @@
+# DB File Local stores it here - Production will store it in a better spot I believe....
+db
+
 # Logs
 logs
 *.log

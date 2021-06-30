@@ -5,6 +5,8 @@
  * @copyright TechnomancyIT
  */
 import log from 'electron-log';
+import isRenderer from 'is-electron-renderer';
+import { ipcRenderer } from 'electron';
 
 import Setting from '../../models/Setting';
 
@@ -13,23 +15,28 @@ export async function getConfig(
   name: string,
   values: string | string[]
 ) {
-  const settings = await Setting.findOne({
-    attributes: { include: ['values'] },
-    where: { type, name },
-  }).catch((e) => {
-    log.error(e);
-  });
-
-  console.log('SET', settings);
-
-  const foundValues: any = settings?.values;
-
-  let valueObject: { [key: string]: any } = {};
-  if (Array.isArray(values))
-    values.map((value) => {
-      valueObject[value] = foundValues[value];
+  console.log('IS', isRenderer);
+  if (!isRenderer) {
+    console.log('THIS IS RUNNING');
+    const settings = await Setting.findOne({
+      attributes: { include: ['values'] },
+      where: { type, name },
+    }).catch((e) => {
+      log.error(e);
     });
-  else valueObject = foundValues[values];
 
-  return valueObject;
+    console.log('SET', settings);
+
+    const foundValues: any = settings?.values;
+
+    let valueObject: { [key: string]: any } = {};
+    if (Array.isArray(values))
+      values.map((value) => {
+        valueObject[value] = foundValues[value];
+      });
+    else valueObject = foundValues[values];
+
+    return valueObject;
+  }
+  return ipcRenderer.invoke('configurator-get', { type, name, values });
 }
