@@ -11,16 +11,15 @@ import { sequelize } from '../libs/database';
 import { createConfig, getConfig, updateConfig } from '../libs/configurator';
 
 export default async () => {
-  // await sequelize.sync();
-  // //  fR.clear();
-  // const isFirstRun = fR();
-  // if (!isFirstRun) return;
-  // console.log('TERDS');
-  // await createConfig('application', 'main', { darkmode: true });
-  // const darkmode = await getConfig('application', 'main', [
-  //   'darkmode',
-  //   'another',
-  // ]);
+  await sequelize.sync();
+  fR.clear();
+  const isFirstRun = fR();
+  if (!isFirstRun) return;
+  await createConfig('application', 'main', { darkmode: true });
+  const darkmode = await getConfig('application', 'main', [
+    'darkmode',
+    'another',
+  ]);
   // console.log(darkmode);
   // const updated = await updateConfig('main', {
   //   darkmode: false,

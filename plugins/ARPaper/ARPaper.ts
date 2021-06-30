@@ -9,31 +9,19 @@ import WallpaperPage from './pages/main';
 import EventEmitter from 'events';
 import Library, { LibraryAttributes } from './models/Library';
 
-import fs from 'fs';
 import path from 'path';
 import ipcStart, { getIpc } from './ipc';
 
 const ee = new EventEmitter();
 
 (async () => {
-  const libraryString = fs.readFileSync(
-    path.join(
-      __dirname,
-      '../../',
-      'plugins',
-      'wallpaper/models/',
-      'Library.js'
-    ),
-    'utf-8'
-  );
-
   await ipcStart(ee, {
     models: path.join(
       __dirname,
       '../../',
       'plugins',
-      'wallpaper/models/',
-      'Library.js'
+      'ARPaper/models/',
+      'Library.ts'
     ),
     type: 'addModels',
   });

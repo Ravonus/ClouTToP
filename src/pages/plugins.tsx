@@ -70,7 +70,10 @@ const Plugins: FC<PluginsProps> = ({
   addPluginMenu,
   setPage,
 }) => {
-  const [plugins, setPlugins] = useState([]);
+  let plugins: { [key: string]: any };
+  let setPlugins: any;
+
+  [plugins, setPlugins] = useState({});
 
   const history = useHistory();
 
@@ -83,7 +86,8 @@ const Plugins: FC<PluginsProps> = ({
 
   useEffect(() => {
     if (!firstRun) return;
-    plugins.map((opt: OptionType) => {
+    Object.keys(plugins).map((key: string) => {
+      const opt: OptionType = plugins[key];
       let logo;
       if (opt.logo) {
         const logoPath = path.resolve(`${opt.path}/assets${opt.logo}`);
@@ -171,7 +175,8 @@ const Plugins: FC<PluginsProps> = ({
 
   return (
     <div className='container grid grid-cols-3 gap-4'>
-      {plugins.map((opt: OptionType) => {
+      {Object.keys(plugins).map((key: string) => {
+        const opt: OptionType = plugins[key];
         return (
           <div key={`plugin-${opt.name}`}>
             {/* <WallpaperPage /> */}

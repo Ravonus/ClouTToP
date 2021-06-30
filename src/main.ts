@@ -16,10 +16,16 @@ import { loader } from './libs/plugins';
 import { wait } from './functions';
 
 //IPC setup
-import { configuratorCreate, configuratorGet, configuratorUpdate } from './ipc';
+import {
+  configuratorCreate,
+  configuratorGet,
+  configuratorUpdate,
+  configuratorDelete,
+} from './ipc';
 configuratorCreate;
 configuratorGet;
 configuratorUpdate;
+configuratorDelete;
 
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
 

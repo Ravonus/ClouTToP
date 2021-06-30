@@ -13,10 +13,11 @@ export async function createConfig(
   name: string,
   values: {}
 ) {
-  if (!isRenderer)
+  if (!isRenderer) {
+    console.log(values);
     return await Setting.create({ type, name, values }).catch((e) => {
       error: e;
     });
-
+  }
   return ipcRenderer.invoke('configurator-create', { type, name, values });
 }

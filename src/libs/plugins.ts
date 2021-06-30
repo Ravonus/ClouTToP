@@ -45,7 +45,7 @@ export async function loader() {
     }
   });
   if (pluginFileList.length > 0) {
-    let plugins: any = [];
+    let plugins: any = {};
     pluginFileList.map((plugin) => {
       log.info(`${plugin} is loading for the first time`);
 
@@ -57,12 +57,16 @@ export async function loader() {
         config = fs.readFileSync(`${myPluginDirecotry}/config.json`, 'utf-8');
       } catch (e) {}
       if (config) {
-        plugins.push({ ...JSON.parse(config), path: myPluginDirecotry });
+        config = JSON.parse(config);
+        plugins[config.name] = { ...config, path: myPluginDirecotry };
       } else
         log.error(`Could not find plugin configuration file for ${plugin}.`);
     });
 
-    plugins.map((plugin: any) => {
+    console.log(plugins);
+
+    Object.keys(plugins).map((key: string) => {
+      const plugin = plugins[key];
       if (plugin.mainProcess) {
         //   pluginMain[plugin.mainProcess];
         // let file = fs.readFileSync(
