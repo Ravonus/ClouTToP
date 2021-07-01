@@ -12,6 +12,11 @@ module.exports = {
   module: {
     rules,
   },
+  // output: {
+  //   filename: '.webpack/renderer/[name].js',
+  //   path: `${__dirname}/dist`,
+  //   publicPath: '',
+  // },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.html'],
   },

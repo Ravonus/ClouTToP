@@ -20,9 +20,8 @@ export default async () => {
     'darkmode',
     'another',
   ]);
-  // console.log(darkmode);
+
   // const updated = await updateConfig('main', {
   //   darkmode: false,
   // });
-  // console.log(updated);
 };

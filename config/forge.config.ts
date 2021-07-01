@@ -9,7 +9,8 @@ module.exports = {
   hooks: 'require:./electronBuild/hooksController.ts',
   packagerConfig: {
     // asar: {
-    //   unpackDir: '{node_modules/iohook,.webpack/plugins}',
+    //   unpackDir:
+    //     '{node_modules/iohook,.webpack/plugins,src/libs/pluginImporter}',
     // },
   },
   makers: [
@@ -49,11 +50,6 @@ module.exports = {
               html: './src/wallpaper.html',
               js: './src/wp.tsx',
               name: 'wallpaper',
-            },
-            {
-              html: './src/transparent.html',
-              js: './src/child.tsx',
-              name: 'child',
             },
           ],
         },

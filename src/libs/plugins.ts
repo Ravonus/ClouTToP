@@ -9,11 +9,14 @@ import log from 'electron-log';
 import path from 'path';
 import fs from 'fs';
 import { createConfig, getConfig, deleteConfig } from './configurator';
+import importLazy from 'import-lazy';
+const importFrom = require('import-from');
 
 import requireFromString from 'require-from-string';
-import pluginsMainProcess from '../pluginMainImporter';
 
-const pluginMain: any = pluginsMainProcess;
+// import pluginsMainProcess from './pluginMainImporter';
+
+// const pluginMain: any = pluginsMainProcess;
 
 // .map((fileList) => fileList.substr(0, fileList.length - 3));
 
@@ -24,13 +27,13 @@ export async function loader() {
     'pluginLocation'
   );
 
-  const pluginDirectory =
-    pluginLocation || path.join(__dirname, '../../', 'plugins');
+  const pluginDirectory = path.join(__dirname, '../../../', 'cloutPlugins');
 
   const pluginFileList = fs.readdirSync(pluginDirectory);
 
   //Developer option to delete store to test.
   deleteConfig('plugins', 'pluginLocation');
+  deleteConfig('plugins', 'list');
   log.info('Plugin loader started');
   let plugins: any[];
   try {
@@ -57,13 +60,34 @@ export async function loader() {
         config = fs.readFileSync(`${myPluginDirecotry}/config.json`, 'utf-8');
       } catch (e) {}
       if (config) {
+        console.log('ITS THIS');
         config = JSON.parse(config);
         plugins[config.name] = { ...config, path: myPluginDirecotry };
       } else
         log.error(`Could not find plugin configuration file for ${plugin}.`);
+      console.log(plugins[config.name]);
+      if (plugins[config.name].mainProcess) {
+        console.log(
+          'RANz',
+          `${myPluginDirecotry}/${plugins[config.name].mainProcess}`
+        );
+        // importFrom(
+        //   path.resolve(myPluginDirecotry),
+        //   plugins[config.name].mainProcess
+        // );
+        let file = fs.readFileSync(
+          path.resolve(myPluginDirecotry, plugins[config.name].mainProcess),
+          'utf-8'
+        );
+        // importLazy(
+        //   require(path.resolve(
+        //     myPluginDirecotry,
+        //     plugins[config.name].mainProcess
+        //   ))()
+        // );
+        importLazy(requireFromString(file));
+      }
     });
-
-    console.log(plugins);
 
     Object.keys(plugins).map((key: string) => {
       const plugin = plugins[key];
@@ -83,6 +107,7 @@ export async function loader() {
         //     match.replace('__dirname', plugin.path.replace(/\\/g, '/'))
         //   );
         // });
+        // importFrom(`${myPluginDirecotry}/${plugin.mainProcess}`);
 
         //     require(`${myPluginDirecotry}/${plugin.mainProcess}`);
         // require(path.resolve(`${plugin.path}/${plugin.mainProcess}`));

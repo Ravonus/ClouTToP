@@ -1,5 +1,8 @@
+declare let __webpack_public_path__: any;
+
 import { FC, Component } from 'react';
 import ReactTooltip from 'react-tooltip';
+import { remote } from 'electron';
 
 import fs from 'fs';
 import path from 'path';
@@ -15,15 +18,31 @@ import { getConfig } from '../libs/configurator';
 
 import requireFromString from 'require-from-string';
 
+import Testa from '../components/PluginPage/index';
+
 import Card from '../components/cards/PluginCard';
 
-import p from '../pluginImporter';
+import pluginImporter from '../pluginImporter';
 import { Suspense } from 'react';
 import log from 'electron-log';
 
 //Icons
 import WarningIcon from '../assets/icons/iconmonstr-warning-10.svg';
 import { useEffect } from 'react';
+
+console.log(remote.app.getAppPath(), '<--- my dirname');
+let terds: any;
+let file: any;
+try {
+  // file = fs.readFileSync(
+  //   path.resolve(`${remote.app.getAppPath()}/.webpack/renderer/public/terd.ts`),
+  //   'utf-8'
+  // );
+  // requireFromString(file);
+  // console.log('ITS JUST THE REFRESH..');
+} catch (e) {
+  // console.log(e);
+}
 
 interface PluginsProps {
   setRoute: Function;
@@ -51,7 +70,9 @@ export interface OptionType {
   };
 }
 
-const plugins: { [key: string]: any } = p;
+// terds = requireFromString(file);
+// console.log(terds, 'eeek', file);
+const plugins: { [key: string]: any } = pluginImporter;
 
 const pluginList: { [key: string]: any } = {};
 
@@ -135,8 +156,8 @@ const Plugins: FC<PluginsProps> = ({
       // addPluginMenu(menu);
       setTimeout(() => {
         addPluginMenu(menu);
-        setRoutePage(opt.component, pluginList[opt.component]);
-        setRoute(opt);
+        setRoutePage(opt, pluginList[opt.component]);
+        //   setRoute(opt);
 
         const el: any = document.querySelector('#DashboardButton');
         if (el) el.click();
@@ -175,6 +196,121 @@ const Plugins: FC<PluginsProps> = ({
 
   return (
     <div className='container grid grid-cols-3 gap-4'>
+      <Testa
+        script={() => {
+          console.log('TERDS BUT NOT TERDS GHA');
+          const menu = [
+            {
+              name: 'plugins_ARPaper_scenesz',
+              pluginName: 'ARPaper',
+              el: (
+                <NavLink
+                  onClick={() => setPage(`plugins_ARPaper_scenesz`)}
+                  className='navButton'
+                  to='plugins_ARPaper_scenesz'
+                  id='plugins_ARPaper_scenesz'
+                >
+                  <div
+                    data-tip={'ARPaper Scenes'}
+                    className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
+                    style={{ width: 46, height: 34 }}
+                  >
+                    <ReactTooltip />
+                    <img
+                      className='ml-3 my-2 relative'
+                      style={{
+                        width: 24,
+                        height: 24,
+                        top: 5,
+                        filter:
+                          'invert(48%) sepia(29%) saturate(2476%) hue-rotate(190deg) brightness(118%) contrast(119%) drop-shadow(-0.5px -0.5px 0 black) drop-shadow(0.5px 0.5px 0 black)',
+                      }}
+                      src=''
+                      alt='S'
+                    />
+                  </div>
+                </NavLink>
+              ),
+            },
+            {
+              name: 'plugins_ARPaper_libraryz',
+              pluginName: 'ARPaper',
+              el: (
+                <NavLink
+                  onClick={() => setPage(`plugins_ARPaper_libraryz`)}
+                  className='navButton'
+                  to='plugins_ARPaper_libraryz'
+                  id='plugins_ARPaper_libraryz'
+                >
+                  <div
+                    data-tip={'ARPaper Library'}
+                    className='hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer'
+                    style={{ width: 46, height: 34 }}
+                  >
+                    <ReactTooltip />
+                    <img
+                      className='ml-3 my-2 relative'
+                      style={{
+                        width: 24,
+                        height: 24,
+                        top: 5,
+                        filter:
+                          'invert(48%) sepia(29%) saturate(2476%) hue-rotate(190deg) brightness(118%) contrast(119%) drop-shadow(-0.5px -0.5px 0 black) drop-shadow(0.5px 0.5px 0 black)',
+                      }}
+                      src=''
+                      alt='S'
+                    />
+                  </div>
+                </NavLink>
+              ),
+            },
+          ];
+
+          useEffect(() => {
+            console.log('FAGZ');
+            addPluginMenu(menu[1], 'plugins_ARPaper_libraryz', {
+              route: {
+                name: 'library2',
+                path: '/plugins_ARPaper_libraryz',
+                component: 'Library2',
+                apiLoad: true,
+                html: <div>this is a test from html</div>,
+              },
+              apiLoad: true,
+              html: <div>this is a test from html</div>,
+              component: Testa,
+            });
+            addPluginMenu(menu[0], 'plugins_ARPaper_scenesz', {
+              route: {
+                name: 'scenes2',
+                path: '/plugins_ARPaper_scenesz',
+                component: 'Scenes2',
+                apiLoad: true,
+                html: <div>this is a test from html</div>,
+              },
+              component: Testa,
+            });
+            // setRoutePage(
+            //   {
+            //     name: 'library',
+            //     path: '/plugins_ARPaper_library',
+            //     component: 'Library',
+            //   },
+            //   <Testa script={<div>terd3</div>}></Testa>
+            // );
+            // setRoutePage(
+            //   {
+            //     name: 'scenes',
+            //     path: '/plugins_ARPaper_scenes',
+            //     component: 'Scenes',
+            //   },
+            //   <Testa script={<div>terd4</div>}></Testa>
+            // );
+          }, []);
+
+          return <></>;
+        }}
+      ></Testa>
       {Object.keys(plugins).map((key: string) => {
         const opt: OptionType = plugins[key];
         return (
@@ -205,3 +341,5 @@ const Plugins: FC<PluginsProps> = ({
 };
 
 export default Plugins;
+
+__webpack_public_path__ = `./`;

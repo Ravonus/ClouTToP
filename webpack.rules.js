@@ -37,7 +37,12 @@ module.exports = [
 
   {
     test: /\.tsx?$/,
-    exclude: /(node_modules|.webpack)/,
+    exclude: [
+      /(node_modules|.webpack)/,
+      path.join(__dirname, 'src/libs/', 'pluginImporter'),
+      path.join(__dirname, 'src/libs/', 'pluginMainImporter'),
+    ],
+
     use: {
       loader: 'ts-loader',
       options: {
@@ -57,11 +62,12 @@ module.exports = [
       {
         loader: 'file-loader',
         options: {
-          name: 'images/[hash]-[name].[ext]',
+          name: 'public/images/[name].[ext]',
         },
       },
     ],
   },
+
   // Put your webpack loader rules in this array.  This is where you would put
   // your ts-loader configuration for instance:
   /**

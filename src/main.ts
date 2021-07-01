@@ -5,14 +5,16 @@
  * @copyright TechnomancyIT
  */
 
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, protocol } from 'electron';
 import isDev from 'electron-is-dev';
+import fs from 'fs';
 
 //Local Modules
 import wp from './Wallpaper';
 import db from './ipc/database';
 import ipc from './libs/node-ipc';
 import { loader } from './libs/plugins';
+import path from 'path';
 import { wait } from './functions';
 
 //IPC setup
@@ -55,7 +57,7 @@ const createWindow = () => {
       webviewTag: true,
       nodeIntegration: true,
       enableRemoteModule: true,
-      //webSecurity: false,
+      webSecurity: false,
       contextIsolation: false,
     },
   });
@@ -73,6 +75,13 @@ const createWindow = () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+  });
+
+  protocol.registerFileProtocol('public', (request, callback) => {
+    const url = request.url.substr(7);
+    console.log(__dirname, url);
+
+    callback({ path: path.normalize(`${__dirname}/${url}`) });
   });
 };
 

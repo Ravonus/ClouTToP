@@ -6,6 +6,7 @@
  */
 
 const nodeExternals = require('webpack-node-externals');
+const path = require('path');
 
 module.exports = {
   /**
@@ -19,6 +20,11 @@ module.exports = {
     rules: require('./webpack.rules'),
   },
 
+  // output: {
+  //   filename: '.webpack/main/[name].js',
+  //   path: `${__dirname}/dist`,
+  //   publicPath: '',
+  // },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.html'],
   },

@@ -12,24 +12,23 @@ import { addModels, sequelize } from './database';
 ipc.config.id = 'Clout';
 ipc.config.retry = 1500;
 
-console.log('ITS A GOING');
+ipc.config.silent = true;
 
 ipc.serve(function () {
-  ipc.server.on('api', async function (data, socket) {
+  ipc.server.on('api', async function (data, socket, cb) {
     console.log('MY DATA', data);
     let doc;
     if (data.type === 'addModel') await addModels([data.models]);
 
     if (data.type === 'database') {
       const model: any = sequelize.models[data.table];
-      console.log('model', model);
 
       doc = await model[data.method](data.values).catch((e: any) => {
         console.log('WTFD', e);
       });
     }
 
-    serverEmit(socket, { doc, type: data.type });
+    serverEmit(socket, { doc, type: data.type, emitterId: data.emitterId });
   });
   ipc.server.on('socket.disconnected', function (socket, destroyedSocketID) {
     ipc.log('client ' + destroyedSocketID + ' has disconnected!');

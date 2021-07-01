@@ -56,9 +56,7 @@ export default () => {
 
   // mainWindow.webContents.openDevTools();
 
-  ipcMain.on('wpClick', (e, css) => {
-    // console.log(mouse());
-  });
+  ipcMain.on('wpClick', (e, css) => {});
 
   const dir = path.join(__dirname, '../renderer/', 'wallpaper/');
 

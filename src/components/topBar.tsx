@@ -2,6 +2,7 @@
 
 import { FC, useState } from 'react';
 import { remote } from 'electron';
+import path from 'path';
 
 import Close from '../assets/icons/iconmonstr-x-mark-8.svg';
 import CloseThin from '../assets/icons/iconmonstr-x-mark-thin.svg';
@@ -25,8 +26,6 @@ let firstRun = true;
 
 const TopBar: FC<TopProps> = ({ darkmodeCheck, darkmode, setDarkmode }) => {
   const [width, setWidth] = useState(window.innerWidth);
-
-  console.log('HERSTORY', useHistory());
 
   if (firstRun) {
     useHistory().push('/dashboard');

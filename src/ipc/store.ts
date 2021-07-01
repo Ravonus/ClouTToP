@@ -6,6 +6,4 @@
  */
 import { ipcMain } from 'electron';
 
-export default ipcMain.on('store', (event, value) => {
-  console.log('RAN', value);
-});
+export default ipcMain.on('store', (event, value) => {});

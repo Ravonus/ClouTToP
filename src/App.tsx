@@ -13,6 +13,7 @@ import {
   NavLink,
   matchPath,
   HashRouterProps,
+  useHistory,
 } from 'react-router-dom';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
@@ -116,8 +117,10 @@ function App(props: any) {
     Settings,
     Plugins,
   });
+  let history = useHistory();
 
   async function setRoute(value: any) {
+    console.log('DUD', value);
     routes.push({
       name: value.name,
       component: value.component,
@@ -126,16 +129,21 @@ function App(props: any) {
     await setRoutes(routes);
   }
 
-  async function setRoutePage(name: string, component: any) {
-    console.log('routesLoaded', routesLoaded, name);
-
+  function setRoutePage(opt: any, component: any) {
+    console.log(opt);
+    const name = opt.component;
+    console.log('NAME', name);
     if (routesLoaded.includes(name.toLocaleLowerCase())) {
+      console.log('ITS THIS Poopz');
+      //  setRoute(opt);
       return;
     } else {
       routePages[name] = component;
-      await setRoutePages(routePages);
+      setRoutePages(routePages);
       routesLoaded.push(name.toLocaleLowerCase());
-      await setRoutesLoaded(routesLoaded);
+      setRoutesLoaded(routesLoaded);
+      console.log('eek', name, routesLoaded);
+      setRoute(opt);
     }
   }
 
@@ -150,7 +158,6 @@ function App(props: any) {
   useEffect(() => {
     (async () => {
       const dm: any = await getConfig('application', 'main', 'darkmode');
-      console.log('THE WOOTEST OF ALL WOOTEST', dm);
       setDarkmode(dm);
       const pluginButton: any = await waitForNavigation('id', 'PluginsButton');
       pluginButton?.click();
@@ -317,7 +324,7 @@ function App(props: any) {
     await setDarkmode(value);
   }
 
-  async function addPluginMenu(pluginMenu: any, id: string) {
+  async function addPluginMenu(pluginMenu: any, id: string, route?: any) {
     let found = false;
 
     menu.pluginMenu.map((localMenu: any) => {
@@ -326,19 +333,34 @@ function App(props: any) {
 
     if (found) return;
 
-    menu.pluginMenu.push(pluginMenu);
     // menus.pluginMenu.push(pluginMenu);
 
-    await wait(100);
-    if (menu.mainMenu.length > 0) setMenu(menu);
+    if (menu.mainMenu.length > 0) {
+      const t = menu;
+
+      t.pluginMenu = [...t.pluginMenu, pluginMenu];
+
+      //  menu.pluginMenu.push(pluginMenu);
+      setMenu(t);
+    }
+    //
+    await wait(15);
     const el: any = document.querySelector('#DashboardButton');
     if (el) el.click();
+
+    await wait(5);
 
     const elPlug: any = document.querySelector('#PluginsButton');
     if (elPlug) elPlug.click();
 
+    await wait(5);
+
     const el2: any = document.querySelector(`#${pluginMenu.pluginName}`);
     if (el2) el2.click();
+
+    console.log('rut', route);
+    await wait(100);
+    if (route) setRoutePage(route.route, route.component);
   }
 
   useEffect(() => {
@@ -366,7 +388,9 @@ function App(props: any) {
           <Menu darkmode={darkmode} setPage={setPage} navInfo={menu} />
           <div className='h-screen bg-gray-200 dark:bg-gray-700 border-transparent group-hover:border-primary border-2'>
             <div className='container pt-8'>
-              {routes.map((link) => {
+              {routes.map((link: any) => {
+                console.log('RUNNING RUNNING RUNNING', link);
+
                 if (checkLoadedRoutes.includes(link.link)) return;
                 checkLoadedRoutes.push(link.link);
                 const Component =
@@ -377,6 +401,7 @@ function App(props: any) {
                     render={(props) => {
                       return (
                         <Component
+                          script={<div>{link.html}</div>}
                           checkActive={checkActive}
                           sidebarCheck={sidebarCheck}
                           setPage={setPage}

@@ -23,11 +23,7 @@ export async function getConfig(
       log.error(e);
     });
 
-    console.log('EEK');
-
     if (!settings) return undefined;
-
-    console.log('SET', settings);
 
     const foundValues: any = settings?.values;
 
@@ -40,8 +36,6 @@ export async function getConfig(
 
     return valueObject;
   }
-
-  console.log('FIRST RUN?');
 
   return ipcRenderer.invoke('configurator-get', { type, name, values });
 }

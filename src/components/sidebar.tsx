@@ -91,7 +91,6 @@ const Menu: FC<MenuProps> = ({ navInfo, setPage, darkmode }) => {
           className='navButton'
           to='/settings'
           onClick={() => {
-            console.log('terd');
             setPage('settings');
           }}
         >

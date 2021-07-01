@@ -13,11 +13,9 @@ export default ipcMain.handle('database', async (event, opts) => {
   const modelFunc: any = sequelize.models[model];
   let lookup;
   if (!type || type === 'read') {
-    console.log(modelFunc, model, sequelize.models);
-
     lookup = await modelFunc[func || 'findAll']({ raw: true, ...query });
   }
-  console.log(lookup);
+
   if (!lookup) return { error: 'Issue with lookup.' };
   return lookup;
 });
