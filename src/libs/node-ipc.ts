@@ -16,11 +16,16 @@ ipc.config.silent = true;
 
 ipc.serve(function () {
   ipc.server.on('api', async function (data, socket, cb) {
-    console.log('MY DATA', data);
     let doc;
+
+    if (data.type === 'registration') {
+      console.log(data);
+    }
+
     if (data.type === 'addModel') await addModels([data.models]);
 
     if (data.type === 'database') {
+      console.log(sequelize.models);
       const model: any = sequelize.models[data.table];
 
       doc = await model[data.method](data.values).catch((e: any) => {

@@ -34,7 +34,7 @@ import PluginsIcon from './assets/icons/iconmonstr-brick-8.svg';
 import HelpIcon from './assets/icons/iconmonstr-help-1.svg';
 import AboutIcon from './assets/icons/iconmonstr-construction-8.svg';
 import DashboardIcon from './assets/icons/iconmonstr-dashboard-4.svg';
-import plugins from './pluginImporter';
+import plugins from './libs/pluginImporter';
 import { wait } from './functions';
 import { getConfig } from './libs/configurator';
 

@@ -5,6 +5,8 @@
  * @copyright TechnomancyIT
  */
 
+//TODO: Scan folders and find plugins
+
 import log from 'electron-log';
 import path from 'path';
 import fs from 'fs';
@@ -27,7 +29,9 @@ export async function loader() {
     'pluginLocation'
   );
 
-  const pluginDirectory = path.join(__dirname, '../../../', 'cloutPlugins');
+  const pluginDirectory = path.join(__dirname, '../../', 'cloutPlugins');
+
+  console.log('ITS THIS', pluginDirectory);
 
   const pluginFileList = fs.readdirSync(pluginDirectory);
 
@@ -41,6 +45,7 @@ export async function loader() {
   } catch (e) {
     plugins = [];
   }
+
   plugins.map((plugin) => {
     const index = pluginFileList.indexOf(plugin);
     if (index > -1) {
@@ -48,6 +53,7 @@ export async function loader() {
     }
   });
   if (pluginFileList.length > 0) {
+    console.log('GOING GOING GON');
     let plugins: any = {};
     pluginFileList.map((plugin) => {
       log.info(`${plugin} is loading for the first time`);
@@ -60,32 +66,38 @@ export async function loader() {
         config = fs.readFileSync(`${myPluginDirecotry}/config.json`, 'utf-8');
       } catch (e) {}
       if (config) {
-        console.log('ITS THIS');
         config = JSON.parse(config);
         plugins[config.name] = { ...config, path: myPluginDirecotry };
       } else
         log.error(`Could not find plugin configuration file for ${plugin}.`);
-      console.log(plugins[config.name]);
+
+      console.log(plugins, config);
       if (plugins[config.name].mainProcess) {
         console.log(
           'RANz',
-          `${myPluginDirecotry}/${plugins[config.name].mainProcess}`
+          `${myPluginDirecotry}${plugins[config.name].mainProcess}`
         );
         // importFrom(
         //   path.resolve(myPluginDirecotry),
         //   plugins[config.name].mainProcess
         // );
-        let file = fs.readFileSync(
-          path.resolve(myPluginDirecotry, plugins[config.name].mainProcess),
-          'utf-8'
-        );
-        // importLazy(
-        //   require(path.resolve(
-        //     myPluginDirecotry,
-        //     plugins[config.name].mainProcess
-        //   ))()
-        // );
-        importLazy(requireFromString(file));
+
+        try {
+          let file = fs.readFileSync(
+            path.resolve(myPluginDirecotry, plugins[config.name].mainProcess),
+            'utf-8'
+          );
+          // importLazy(
+          //   require(path.resolve(
+          //     myPluginDirecotry,
+          //     plugins[config.name].mainProcess
+          //   ))()
+          // );
+          console.log('THIS DOES RUN SO...', myPluginDirecotry, plugins);
+          requireFromString(file);
+        } catch (e) {
+          console.log(e);
+        }
       }
     });
 

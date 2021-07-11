@@ -5,16 +5,15 @@
  * @copyright TechnomancyIT
  */
 
-import { app, BrowserWindow, ipcMain, protocol } from 'electron';
+import { app, BrowserWindow } from 'electron';
+import path from 'path';
 import isDev from 'electron-is-dev';
-import fs from 'fs';
 
 //Local Modules
 import wp from './Wallpaper';
 import db from './ipc/database';
 import ipc from './libs/node-ipc';
 import { loader } from './libs/plugins';
-import path from 'path';
 import { wait } from './functions';
 
 //IPC setup
@@ -24,6 +23,7 @@ import {
   configuratorUpdate,
   configuratorDelete,
 } from './ipc';
+import { loadPlugins } from './libs/compiledPluginLoader';
 configuratorCreate;
 configuratorGet;
 configuratorUpdate;
@@ -35,6 +35,8 @@ loader();
 
 db;
 ipc;
+
+let firstRun = true;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -71,18 +73,26 @@ const createWindow = () => {
   mainWindow.webContents.on('did-finish-load', function () {
     mainWindow?.show();
     wp();
+
+    if (firstRun)
+      loadPlugins(
+        'ARPaper',
+        path.join(__dirname, '../../cloutPlugins/ARPaper/src/pages/main.js')
+      );
+
+    firstRun = false;
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 
-  protocol.registerFileProtocol('public', (request, callback) => {
-    const url = request.url.substr(7);
-    console.log(__dirname, url);
+  // protocol.registerFileProtocol('public', (request, callback) => {
+  //   const url = request.url.substr(7);
+  //   console.log('teeka', __dirname, url);
 
-    callback({ path: path.normalize(`${__dirname}/${url}`) });
-  });
+  //   callback({ path: path.normalize(`${__dirname}/${url}`) });
+  // });
 };
 
 app.on('will-finish-launching', () => {

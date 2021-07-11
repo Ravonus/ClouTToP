@@ -1,11 +1,13 @@
-declare let __webpack_public_path__: any;
+import path from 'path';
+
+//require(`${remote.app.getAppPath()}/.webpack/renderer/public/pluginImporter`);
 
 import { FC, Component } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { remote } from 'electron';
 
 import fs from 'fs';
-import path from 'path';
+
 import {
   HashRouter as Router,
   Route,
@@ -22,13 +24,24 @@ import Testa from '../components/PluginPage/index';
 
 import Card from '../components/cards/PluginCard';
 
-import pluginImporter from '../pluginImporter';
+import pluginImporter from '../libs/pluginImporter';
 import { Suspense } from 'react';
 import log from 'electron-log';
 
 //Icons
 import WarningIcon from '../assets/icons/iconmonstr-warning-10.svg';
 import { useEffect } from 'react';
+
+(global as any).__non_webpack_import__ = remote.require;
+
+// const ffmpeg = __non_webpack_require__(
+//   path.join(
+//     remote.app.getAppPath(),
+//     '/.webpack/renderer/public/pluginImporter.js'
+//   )
+// );
+
+// console.log(ffmpeg, 'eek');
 
 console.log(remote.app.getAppPath(), '<--- my dirname');
 let terds: any;
@@ -79,6 +92,7 @@ const pluginList: { [key: string]: any } = {};
 const pluginKeys = Object.keys(plugins);
 
 pluginKeys.map((key) => {
+  console.log('here?', key, pluginList, plugins);
   pluginList[key] = plugins[key];
 });
 
@@ -100,14 +114,23 @@ const Plugins: FC<PluginsProps> = ({
 
   useEffect(() => {
     (async () => {
+      console.log('ITS THIS MY FRIENDS');
       const foundPlugins = await getConfig('application', 'plugins', 'list');
+      console.log('LOL', foundPlugins);
       if (foundPlugins) setPlugins(foundPlugins);
     })();
   }, []);
 
   useEffect(() => {
+
     if (!firstRun) return;
+
+
     Object.keys(plugins).map((key: string) => {
+      console.log('RECORD', key, pluginKeys);
+
+      if (!pluginKeys.includes(key)) return;
+
       const opt: OptionType = plugins[key];
       let logo;
       if (opt.logo) {
@@ -196,7 +219,7 @@ const Plugins: FC<PluginsProps> = ({
 
   return (
     <div className='container grid grid-cols-3 gap-4'>
-      <Testa
+      {/* <Testa
         script={() => {
           console.log('TERDS BUT NOT TERDS GHA');
           const menu = [
@@ -310,7 +333,7 @@ const Plugins: FC<PluginsProps> = ({
 
           return <></>;
         }}
-      ></Testa>
+      ></Testa> */}
       {Object.keys(plugins).map((key: string) => {
         const opt: OptionType = plugins[key];
         return (
@@ -342,4 +365,4 @@ const Plugins: FC<PluginsProps> = ({
 
 export default Plugins;
 
-__webpack_public_path__ = `./`;
+//__webpack_public_path__ = `./`;

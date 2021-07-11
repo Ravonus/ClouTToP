@@ -14,8 +14,12 @@ module.exports = {
    * that runs in the main process.
    */
   target: 'electron-main',
+
   entry: './src/main.ts',
   // Put your normal webpack config below here
+  optimization: {
+    minimize: false,
+  },
   module: {
     rules: require('./webpack.rules'),
   },
@@ -29,6 +33,6 @@ module.exports = {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.html'],
   },
   externals: [
-    nodeExternals({ modulesFromFile: true, externalsPresets: { node: true } }),
+    nodeExternals(),
   ],
 };

@@ -37,12 +37,7 @@ module.exports = [
 
   {
     test: /\.tsx?$/,
-    exclude: [
-      /(node_modules|.webpack)/,
-      path.join(__dirname, 'src/libs/', 'pluginImporter'),
-      path.join(__dirname, 'src/libs/', 'pluginMainImporter'),
-    ],
-
+    exclude: [/(node_modules|.webpack)/],
     use: {
       loader: 'ts-loader',
       options: {

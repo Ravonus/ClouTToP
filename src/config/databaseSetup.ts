@@ -16,6 +16,7 @@ export default async () => {
   const isFirstRun = fR();
   if (!isFirstRun) return;
   await createConfig('application', 'main', { darkmode: true });
+  console.log('RUNNING AND TUGGING');
   const darkmode = await getConfig('application', 'main', [
     'darkmode',
     'another',
