@@ -41,9 +41,6 @@ import { useEffect } from 'react';
 //   )
 // );
 
-// console.log(ffmpeg, 'eek');
-
-console.log(remote.app.getAppPath(), '<--- my dirname');
 let terds: any;
 let file: any;
 try {
@@ -52,7 +49,6 @@ try {
   //   'utf-8'
   // );
   // requireFromString(file);
-  // console.log('ITS JUST THE REFRESH..');
 } catch (e) {
   // console.log(e);
 }
@@ -84,7 +80,7 @@ export interface OptionType {
 }
 
 // terds = requireFromString(file);
-// console.log(terds, 'eeek', file);
+
 const plugins: { [key: string]: any } = pluginImporter;
 
 const pluginList: { [key: string]: any } = {};
@@ -92,7 +88,6 @@ const pluginList: { [key: string]: any } = {};
 const pluginKeys = Object.keys(plugins);
 
 pluginKeys.map((key) => {
-  console.log('here?', key, pluginList, plugins);
   pluginList[key] = plugins[key];
 });
 
@@ -114,21 +109,15 @@ const Plugins: FC<PluginsProps> = ({
 
   useEffect(() => {
     (async () => {
-      console.log('ITS THIS MY FRIENDS');
       const foundPlugins = await getConfig('application', 'plugins', 'list');
-      console.log('LOL', foundPlugins);
       if (foundPlugins) setPlugins(foundPlugins);
     })();
   }, []);
 
   useEffect(() => {
-
     if (!firstRun) return;
 
-
     Object.keys(plugins).map((key: string) => {
-      console.log('RECORD', key, pluginKeys);
-
       if (!pluginKeys.includes(key)) return;
 
       const opt: OptionType = plugins[key];
@@ -221,7 +210,7 @@ const Plugins: FC<PluginsProps> = ({
     <div className='container grid grid-cols-3 gap-4'>
       {/* <Testa
         script={() => {
-          console.log('TERDS BUT NOT TERDS GHA');
+
           const menu = [
             {
               name: 'plugins_ARPaper_scenesz',
@@ -290,7 +279,7 @@ const Plugins: FC<PluginsProps> = ({
           ];
 
           useEffect(() => {
-            console.log('FAGZ');
+
             addPluginMenu(menu[1], 'plugins_ARPaper_libraryz', {
               route: {
                 name: 'library2',

@@ -50,9 +50,7 @@ module.exports = async (forgeConfig, options) => {
   // if (!fs.existsSync(`${outDirectory}sqlite3`)) {
   //   fs.mkdirSync(`${outDirectory}sqlite3`);
 
-  copyFiles(directory, outDirectory, (err, opt) => {
-    console.log(err, opt);
-  });
+  copyFiles(directory, outDirectory, (err, opt) => {});
 
   // copyFiles(ioHookDirectory, `${outDirectory}iohook`, (err, opt) => {
   //   console.log(err, opt);

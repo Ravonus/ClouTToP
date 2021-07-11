@@ -42,8 +42,6 @@ export function loadPlugins(name: string, filePath: string) {
 
   newPluginString += `\n ${name}: require('${checkedFilePath}').default,\n}\n`;
 
-  console.log(newPluginString);
-
   fileString = fileString.replace(/const plugins = {[^\/]+/, newPluginString);
 
   fs.writeFileSync(mainFilePath, fileString, 'utf-8');

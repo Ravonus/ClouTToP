@@ -89,7 +89,6 @@ const createWindow = () => {
 
   // protocol.registerFileProtocol('public', (request, callback) => {
   //   const url = request.url.substr(7);
-  //   console.log('teeka', __dirname, url);
 
   //   callback({ path: path.normalize(`${__dirname}/${url}`) });
   // });
@@ -118,6 +117,6 @@ app.on('activate', () => {
 });
 
 // ipcMain.on('test', async (event, someArgument) => {
-//   console.log(someArgument);
+
 //   return '';
 // });

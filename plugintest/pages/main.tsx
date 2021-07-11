@@ -1,5 +1,3 @@
-console.log('I RUNS');
-
 import { useEffect } from 'react';
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';

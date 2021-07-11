@@ -7,8 +7,6 @@ interface ToolTipProps {
 }
 
 const load = () => {
-  console.log('I AM RUNNING DUDE');
-
   return (
     <div className='relative flex flex-col items-center group'>
       {' '}

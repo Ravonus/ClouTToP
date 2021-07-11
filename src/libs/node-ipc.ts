@@ -5,7 +5,9 @@
  * @copyright TechnomancyIT
  */
 import ipc from 'node-ipc';
-import Setting from '../models/Setting';
+import Plugin from '../models/Plugin';
+
+// import { Plugin } from './database';
 
 import { addModels, sequelize } from './database';
 
@@ -15,22 +17,22 @@ ipc.config.retry = 1500;
 ipc.config.silent = true;
 
 ipc.serve(function () {
-  ipc.server.on('api', async function (data, socket, cb) {
+  ipc.server.on('api', async function (data, socket) {
     let doc;
 
     if (data.type === 'registration') {
-      console.log(data);
+      console.log('REGISTRATION', data, ipc.config.id);
+      const plugin = await Plugin.findOne({ where: { ipcId: data.id } });
+
+      console.log('IT S HERE', plugin);
     }
 
     if (data.type === 'addModel') await addModels([data.models]);
 
     if (data.type === 'database') {
-      console.log(sequelize.models);
       const model: any = sequelize.models[data.table];
 
-      doc = await model[data.method](data.values).catch((e: any) => {
-        console.log('WTFD', e);
-      });
+      doc = await model[data.method](data.values).catch((e: any) => {});
     }
 
     serverEmit(socket, { doc, type: data.type, emitterId: data.emitterId });

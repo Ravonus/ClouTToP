@@ -120,7 +120,6 @@ function App(props: any) {
   let history = useHistory();
 
   async function setRoute(value: any) {
-    console.log('DUD', value);
     routes.push({
       name: value.name,
       component: value.component,
@@ -130,11 +129,8 @@ function App(props: any) {
   }
 
   function setRoutePage(opt: any, component: any) {
-    console.log(opt);
     const name = opt.component;
-    console.log('NAME', name);
     if (routesLoaded.includes(name.toLocaleLowerCase())) {
-      console.log('ITS THIS Poopz');
       //  setRoute(opt);
       return;
     } else {
@@ -142,7 +138,6 @@ function App(props: any) {
       setRoutePages(routePages);
       routesLoaded.push(name.toLocaleLowerCase());
       setRoutesLoaded(routesLoaded);
-      console.log('eek', name, routesLoaded);
       setRoute(opt);
     }
   }
@@ -150,7 +145,6 @@ function App(props: any) {
   async function sidebarCheck() {
     const bmenu = menu;
     await setMenu({ mainMenu: [], pluginMenu: [] });
-
     await wait(50);
     setMenu(bmenu);
   }
@@ -358,7 +352,6 @@ function App(props: any) {
     const el2: any = document.querySelector(`#${pluginMenu.pluginName}`);
     if (el2) el2.click();
 
-    console.log('rut', route);
     await wait(100);
     if (route) setRoutePage(route.route, route.component);
   }
@@ -389,8 +382,6 @@ function App(props: any) {
           <div className='h-screen bg-gray-200 dark:bg-gray-700 border-transparent group-hover:border-primary border-2'>
             <div className='container pt-8'>
               {routes.map((link: any) => {
-                console.log('RUNNING RUNNING RUNNING', link);
-
                 if (checkLoadedRoutes.includes(link.link)) return;
                 checkLoadedRoutes.push(link.link);
                 const Component =

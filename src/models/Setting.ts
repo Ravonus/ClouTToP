@@ -42,7 +42,7 @@ export default class Setting extends Model<
   type!: 'application' | 'plugin';
   @AllowNull(false)
   @Unique(true)
-  @Column({ type: DataType.JSONB })
+  @Column({ type: DataType.STRING })
   name!: string;
   @AllowNull(false)
   @Column({ type: DataType.JSONB })

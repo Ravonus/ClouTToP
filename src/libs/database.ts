@@ -13,6 +13,7 @@ import path from 'path';
 
 //Local
 import Setting from '../models/Setting';
+import Plugin from '../models/Plugin';
 
 import dbSetup from '../config/databaseSetup';
 
@@ -30,7 +31,7 @@ const sequelize = new Sequelize('ARScreenz', 'ARUser', 'randompassword', {
   logging: console.log,
 });
 
-sequelize.addModels([Setting]);
+sequelize.addModels([Setting, Plugin]);
 
 //sequelize.addModels([path.join(__dirname, '../', 'models/')]);
 
@@ -47,4 +48,4 @@ export async function addModels(models: any[]) {
 
 dbSetup();
 
-export { sequelize };
+export { sequelize, Setting, Plugin };

@@ -14,7 +14,6 @@ export async function createConfig(
   values: {}
 ) {
   if (!isRenderer) {
-    console.log('I RUN');
     return await Setting.create({ type, name, values }).catch((e) => {
       console.log(e);
       error: e;
