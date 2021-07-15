@@ -31,6 +31,7 @@ import log from 'electron-log';
 //Icons
 import WarningIcon from '../assets/icons/iconmonstr-warning-10.svg';
 import { useEffect } from 'react';
+import { ipcRenderer } from 'electron/renderer';
 
 (global as any).__non_webpack_import__ = remote.require;
 
@@ -65,6 +66,9 @@ export interface OptionType {
   name: string;
   logo: string;
   component: string;
+  enabled: boolean;
+  firstRun: boolean;
+  registered: boolean;
   routes: string[];
   style: {};
   fileName: string;
@@ -109,18 +113,55 @@ const Plugins: FC<PluginsProps> = ({
 
   useEffect(() => {
     (async () => {
-      const foundPlugins = await getConfig('application', 'plugins', 'list');
-      if (foundPlugins) setPlugins(foundPlugins);
+      const foundPluginsOpts: any = await getConfig(
+        'application',
+        'plugins',
+        'list'
+      );
+      const foundPluginDocs: any = await ipcRenderer.invoke('database', {
+        model: 'Plugin',
+      });
+      console.log('MY DOCS', foundPluginDocs, foundPluginsOpts);
+
+      foundPluginDocs.map((plugin: any) => {
+        if (foundPluginsOpts[plugin.name])
+          foundPluginsOpts[plugin.name] = {
+            ...foundPluginsOpts[plugin.name],
+            ...plugin,
+          };
+      });
+
+      if (foundPluginsOpts) setPlugins(foundPluginsOpts);
     })();
   }, []);
 
   useEffect(() => {
     if (!firstRun) return;
+    console.log('EEEKA', plugins);
 
     Object.keys(plugins).map((key: string) => {
+      console.log(pluginKeys, key);
+
       if (!pluginKeys.includes(key)) return;
 
       const opt: OptionType = plugins[key];
+
+      function installer(evt: any, message: any) {
+        const newPlugins = plugins;
+        setPlugins({});
+        newPlugins[message.name].enabled = true;
+        newPlugins[message.name].registered = true;
+        newPlugins[message.name].firstRun = false;
+
+        setPlugins(newPlugins);
+      }
+
+      ipcRenderer.removeListener(`pluginInstall-${key}`, installer);
+
+      ipcRenderer.once(`pluginInstall-${key}`, installer);
+
+      if (!opt.enabled) return;
+
       let logo;
       if (opt.logo) {
         const logoPath = path.resolve(`${opt.path}/assets${opt.logo}`);

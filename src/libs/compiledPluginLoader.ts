@@ -1,3 +1,4 @@
+import isDev from 'electron-is-dev';
 /**
  * @author Chad Koslovsky <chad@technomnancy.it>
  * @file Description
@@ -44,7 +45,7 @@ export function loadPlugins(name: string, filePath: string) {
 
   fileString = fileString.replace(/const plugins = {[^\/]+/, newPluginString);
 
-  fs.writeFileSync(mainFilePath, fileString, 'utf-8');
+  if (!isDev) fs.writeFileSync(mainFilePath, fileString, 'utf-8');
 }
 
 export function removePlugins() {}

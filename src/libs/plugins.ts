@@ -1,3 +1,4 @@
+import isDev from 'electron-is-dev';
 import { nanoid } from 'nanoid';
 /**
  * @author Chad Koslovsky <chad@technomnancy.it>
@@ -11,13 +12,22 @@ import { nanoid } from 'nanoid';
 import log from 'electron-log';
 import path from 'path';
 import fs from 'fs';
-import { createConfig, getConfig, deleteConfig } from './configurator';
+import {
+  createConfig,
+  getConfig,
+  deleteConfig,
+  updateConfig,
+} from './configurator';
 import importLazy from 'import-lazy';
 const importFrom = require('import-from');
 
 import requireFromString from 'require-from-string';
 import Plugin from '../models/Plugin';
 import { sequelize } from './database';
+import { isRenderFinished } from '../main';
+import { PluginAcceptWindow } from '../windows/pluginAcceptWindow/PluginAccept';
+import fR from 'electron-first-run';
+import { asyncForEach } from '../functions';
 
 // import pluginsMainProcess from './pluginMainImporter';
 
@@ -25,8 +35,22 @@ import { sequelize } from './database';
 
 // .map((fileList) => fileList.substr(0, fileList.length - 3));
 
+async function loadPopup(opts: any) {
+  await isRenderFinished();
+
+  PluginAcceptWindow(opts);
+}
+
 export async function loader() {
   await sequelize.sync();
+
+  if (isDev) {
+    console.log('DELETE');
+    await deleteConfig('plugins', 'pluginLocation');
+    await deleteConfig('plugins', 'list');
+    await Plugin.destroy({ where: { name: 'ARPaper' } });
+    console.log('DELETE finish');
+  }
 
   const pluginLocation = await getConfig(
     'application',
@@ -34,63 +58,82 @@ export async function loader() {
     'pluginLocation'
   );
 
-  const pluginDirectory = path.join(__dirname, '../../', 'cloutPlugins');
+  const pluginDirectory = path.join(
+    __dirname,
+    `../${isDev ? '../../' : '../'}`,
+    'cloutPlugins'
+  );
 
   const pluginFileList = fs.readdirSync(pluginDirectory);
 
   //Developer option to delete store to test.
-  deleteConfig('plugins', 'pluginLocation');
-  deleteConfig('plugins', 'list');
+
   log.info('Plugin loader started');
   let plugins: any[];
+  let foundPlugins: any;
   try {
-    plugins = [...(await getConfig('application', 'plugins', 'list'))];
+    foundPlugins = await getConfig('application', 'plugins', 'list');
+
+    plugins = [...Object.keys(foundPlugins)];
   } catch (e) {
+    console.log(e);
     plugins = [];
   }
 
-  plugins.map((plugin) => {
+  await asyncForEach(plugins, async (plugin: any) => {
     const index = pluginFileList.indexOf(plugin);
     if (index > -1) {
+      console.log('PLUGIN', plugin);
+      const pluginCheck = await Plugin.findOne({ where: { name: plugin } });
+      if (pluginCheck?.enabled) {
+        const id = nanoid();
+        pluginCheck.ipcId = id;
+        await pluginCheck.save();
+        __non_webpack_require__(
+          path.resolve(
+            `${pluginDirectory}/${plugin}`,
+            foundPlugins[plugin].mainProcess
+          )
+        ).default(id);
+      }
       pluginFileList.splice(index, 1);
     }
   });
+
   if (pluginFileList.length > 0) {
     let plugins: any = {};
     pluginFileList.map((plugin) => {
       log.info(`${plugin} is loading for the first time`);
 
-      let myPluginDirecotry = `${pluginDirectory}/${plugin}`;
-      log.info('PLGS', myPluginDirecotry);
+      let myPluginDirectory = `${pluginDirectory}/${plugin}`;
+      log.info('PLGS', myPluginDirectory);
 
-      let config;
+      let config: any;
       try {
-        config = fs.readFileSync(`${myPluginDirecotry}/config.json`, 'utf-8');
+        config = fs.readFileSync(`${myPluginDirectory}/config.json`, 'utf-8');
       } catch (e) {}
       if (config) {
         config = JSON.parse(config);
-        plugins[config.name] = { ...config, path: myPluginDirecotry };
+        plugins[config.name] = { ...config, path: myPluginDirectory };
       } else
         log.error(`Could not find plugin configuration file for ${plugin}.`);
 
       //Development remove when done testing
-      Plugin.destroy({ where: { name: config.name } });
+      //   Plugin.destroy({ where: { name: config.name } });
 
       if (plugins[config.name].mainProcess) {
         try {
-          let file = fs.readFileSync(
-            path.resolve(myPluginDirecotry, plugins[config.name].mainProcess),
-            'utf-8'
-          );
-
           const id = nanoid();
 
           Plugin.create({ name: config.name, enabled: false, ipcId: id }).then(
             (data) => {
-              console.log(data);
+              loadPopup({ myPluginDirectory, ...config });
             }
           );
-          requireFromString(file).default(id);
+
+          // __non_webpack_require__(
+          //   path.resolve(myPluginDirectory, plugins[config.name].mainProcess)
+          // ).default(id);
         } catch (e) {
           console.log(e);
         }
@@ -104,7 +147,10 @@ export async function loader() {
     //     } catch (e) {}
     //   }
     // });
-
-    createConfig('application', 'plugins', { list: plugins });
+    // console.log('ITS THIS', plugins);
+    // const isFirstRun = fR();
+    // console.log('FIRSTRUN', isFirstRun);
+    // if (isFirstRun) createConfig('application', 'plugins', { list: plugins });
+    updateConfig('plugins', { list: plugins });
   }
 }

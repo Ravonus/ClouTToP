@@ -29,6 +29,7 @@ interface PluginAttributes {
   ipcId?: string;
   enabled: boolean;
   firstRun?: boolean;
+  registered?: boolean;
 }
 
 interface PluginCreationAttributes extends Optional<PluginAttributes, 'id'> {}
@@ -53,6 +54,9 @@ export default class Plugin extends Model<
   @Default(true)
   @Column({ type: DataType.BOOLEAN })
   firstRun!: boolean;
+  @Default(false)
+  @Column({ type: DataType.BOOLEAN })
+  registered!: boolean;
 
   //Relationships
 }

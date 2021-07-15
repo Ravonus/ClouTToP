@@ -21,12 +21,16 @@ export const PluginCard: FC<CardProps> = ({ opt, sidebarCheck }) => {
       className='flex flex-col h-full max-w-lg mx-auto bg-gray-800 rounded-lg cursor-pointer'
     >
       <img
-        className='rounded-lg rounded-b-none'
+        className={
+          !opt.enabled
+            ? 'filter grayscale rounded-lg rounded-b-none'
+            : 'rounded-lg rounded-b-none'
+        }
         src='http://www.3forty.media/ruki/wp-content/uploads/2020/06/meditation-yoga-1024x682.jpg'
         alt='thumbnail'
         loading='lazy'
       />
-      <div className='flex justify-between -mt-4 px-4'>
+      <div className='flex justify-between mt-4 px-4'>
         <span className='inline-block ring-4 bg-primary ring-gray-800 rounded-full text-sm font-medium tracking-wide text-gray-100 px-3 pt-0.5'>
           {opt.name}
         </span>
@@ -54,7 +58,9 @@ export const PluginCard: FC<CardProps> = ({ opt, sidebarCheck }) => {
         <div className='flex border-t border-gray-700 w-full py-4'>
           <div className='flex items-center space-x-3 border-r border-gray-700 w-full'>
             <img
+              className={!opt.enabled ? 'filter grayscale' : ''}
               src={`https://robohash.org/${opt.author}?set=set4&size=35x35`}
+              loading='lazy'
             ></img>
             <div>
               <p className='text-sm font-semibold tracking-wide text-gray-200'>

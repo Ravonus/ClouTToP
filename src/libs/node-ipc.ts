@@ -4,8 +4,10 @@
  * @desc Created on 2021-06-29 11:57:47 pm
  * @copyright TechnomancyIT
  */
+import { nanoid } from 'nanoid';
 import ipc from 'node-ipc';
 import Plugin from '../models/Plugin';
+import path from 'path';
 
 // import { Plugin } from './database';
 
@@ -21,17 +23,32 @@ ipc.serve(function () {
     let doc;
 
     if (data.type === 'registration') {
-      console.log('REGISTRATION', data, ipc.config.id);
       const plugin = await Plugin.findOne({ where: { ipcId: data.id } });
 
-      console.log('IT S HERE', plugin);
+      if (plugin) {
+        doc = { registered: true, id: plugin.ipcId, firstRun: plugin.firstRun };
+
+        plugin.firstRun = false;
+        plugin.registered = true;
+
+        plugin.save();
+      } else doc = { registered: false };
+    } else {
+      console.log(socket.id);
+      const application = await Plugin.findOne({
+        where: { ipcId: socket.id },
+      });
+
+      console.log('APPLICATION', application, ipc.config.id);
+
+      if (!application)
+        return serverEmit(socket, { error: 'IPC App ID mismatch.' });
     }
 
-    if (data.type === 'addModel') await addModels([data.models]);
+    if (data.type === 'addModel') await addModels([path.resolve(data.models)]);
 
     if (data.type === 'database') {
       const model: any = sequelize.models[data.table];
-
       doc = await model[data.method](data.values).catch((e: any) => {});
     }
 

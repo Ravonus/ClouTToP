@@ -42,6 +42,7 @@ export async function waitForModels() {
 }
 
 export async function addModels(models: any[]) {
+  console.log('NODE', models);
   sequelize.addModels(models);
   await sequelize.sync();
 }

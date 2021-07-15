@@ -47,9 +47,14 @@ module.exports = {
               name: 'main_window',
             },
             {
-              html: './src/wallpaper.html',
-              js: './src/wp.tsx',
+              html: './src/windows/wallpaperWindow/renderers/index.html',
+              js: './src/windows/wallpaperWindow/renderers/index.tsx',
               name: 'wallpaper',
+            },
+            {
+              html: './src/windows/pluginAcceptWindow/renderers/index.html',
+              js: './src/windows/pluginAcceptWindow/renderers/index.tsx',
+              name: 'pluginAccept',
             },
           ],
         },

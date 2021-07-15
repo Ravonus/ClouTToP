@@ -8,3 +8,5 @@ export { configuratorCreate } from './configuratorCreate';
 export { configuratorUpdate } from './configuratorUpdate';
 export { configuratorGet } from './configuratorGet';
 export { configuratorDelete } from './configuratorDelete';
+export { pluginSetup } from './pluginSetup';
+export { isDev } from './isDev';

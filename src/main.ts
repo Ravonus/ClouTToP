@@ -10,7 +10,7 @@ import path from 'path';
 import isDev from 'electron-is-dev';
 
 //Local Modules
-import wp from './Wallpaper';
+import wp from './windows/wallpaperWindow/Wallpaper';
 import db from './ipc/database';
 import ipc from './libs/node-ipc';
 import { loader } from './libs/plugins';
@@ -24,6 +24,7 @@ import {
   configuratorDelete,
 } from './ipc';
 import { loadPlugins } from './libs/compiledPluginLoader';
+import { grabPluginAcceptWindows } from './windows/pluginAcceptWindow/PluginAccept';
 configuratorCreate;
 configuratorGet;
 configuratorUpdate;
@@ -46,11 +47,11 @@ if (require('electron-squirrel-startup')) {
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow: any;
+export let mainWindow: any;
 
 const createWindow = () => {
   // Create the browser window.
-  let mainWindow: null | BrowserWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     minHeight: 400,
     minWidth: 600,
     frame: false,
@@ -59,7 +60,6 @@ const createWindow = () => {
       webviewTag: true,
       nodeIntegration: true,
       enableRemoteModule: true,
-      webSecurity: false,
       contextIsolation: false,
     },
   });
@@ -68,7 +68,7 @@ const createWindow = () => {
   mainWindow.hide();
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   mainWindow.webContents.on('did-finish-load', function () {
     mainWindow?.show();
@@ -80,11 +80,17 @@ const createWindow = () => {
         path.join(__dirname, '../../cloutPlugins/ARPaper/src/pages/main.js')
       );
 
+    console.log('FIRSTRUN');
     firstRun = false;
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+  });
+
+  mainWindow.on('focus', () => {
+    const windows = grabPluginAcceptWindows();
+    if (windows.length > 0) windows[0].moveTop();
   });
 
   // protocol.registerFileProtocol('public', (request, callback) => {
@@ -120,3 +126,11 @@ app.on('activate', () => {
 
 //   return '';
 // });
+
+export async function isRenderFinished() {
+  if (firstRun) {
+    await wait(25);
+    await isRenderFinished();
+  }
+  return true;
+}
