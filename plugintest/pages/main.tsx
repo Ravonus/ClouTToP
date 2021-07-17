@@ -1,3 +1,5 @@
+console.log('I RUNS');
+
 import { useEffect } from 'react';
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -7,11 +9,7 @@ import ReactTooltip from 'react-tooltip';
 
 import Scenes from './scenes';
 import LibraryPage from './library';
-import log from 'electron-log';
-import { ipcRenderer } from 'electron';
-
-export const ScenesIcon = require('../assets/icons/iconmonstr-computer-2.svg');
-export const LibraryIcon = require('../assets/icons/iconmonstr-layer-22.svg');
+import BottomBar from '../components/BottomBar';
 
 interface MainProps {
   setRoute: Function;
@@ -54,7 +52,7 @@ const Main: FC<MainProps> = ({
                 filter:
                   'invert(48%) sepia(29%) saturate(2476%) hue-rotate(190deg) brightness(118%) contrast(119%) drop-shadow(-0.5px -0.5px 0 black) drop-shadow(0.5px 0.5px 0 black)',
               }}
-              src={ScenesIcon.default}
+              src='../assets/icons/iconmonstr-computer-2.svg'
               alt='S'
             />
           </div>
@@ -86,7 +84,7 @@ const Main: FC<MainProps> = ({
                 filter:
                   'invert(48%) sepia(29%) saturate(2476%) hue-rotate(190deg) brightness(118%) contrast(119%) drop-shadow(-0.5px -0.5px 0 black) drop-shadow(0.5px 0.5px 0 black)',
               }}
-              src={LibraryIcon.default}
+              src='../assets/icons/iconmonstr-layer-22.svg'
               alt='S'
             />
           </div>
@@ -132,8 +130,9 @@ const Main: FC<MainProps> = ({
 
   return (
     <div className='text-center l flex flex-col justify justify-center dark:text-primary'>
-      I PLUGIN MAIN WALLPAPERS = ❤
-      <img src={ScenesIcon.default} className='w-10 h-10' alt='' />
+      I PLUGIN MAIN WALLPAPERS = ❤ and no fucking way!z
+      {/* <img src={ScenesIcon.default} className='w-10 h-10' alt='' /> */}
+      <BottomBar></BottomBar>
     </div>
   );
 };

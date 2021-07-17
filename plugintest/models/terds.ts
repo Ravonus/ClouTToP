@@ -7,24 +7,11 @@
 
 //TODO: I need to make a system that actually generates this file based on plugins that are turned on. (This way typescript can access the files correctly) - Once this is done an API way to grab each of these files as well so you can access them from eachother.
 
-import { ipcRenderer } from 'electron/renderer';
+import WallpaperPage from '../pages/main';
 
-const isDev = ipcRenderer.sendSync('isDev');
-
-let WallpaperPage;
-
-if (isDev) {
-  WallpaperPage =
-    require('../../../cloutPlugins/ARPaper/src/pages/main').default;
-}
-
-const plugins: any = {};
-
-if (isDev) {
-  plugins.ARPaper = WallpaperPage;
-}
-
-console.log(plugins);
+const plugins = {
+  WallpaperPage,
+};
 
 export default plugins;
 

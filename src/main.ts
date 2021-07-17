@@ -68,7 +68,8 @@ const createWindow = () => {
   mainWindow.hide();
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools();
+
+  if (isDev) mainWindow.webContents.openDevTools();
 
   mainWindow.webContents.on('did-finish-load', function () {
     mainWindow?.show();

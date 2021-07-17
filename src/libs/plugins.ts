@@ -45,11 +45,9 @@ export async function loader() {
   await sequelize.sync();
 
   if (isDev) {
-    console.log('DELETE');
     await deleteConfig('plugins', 'pluginLocation');
     await deleteConfig('plugins', 'list');
     await Plugin.destroy({ where: { name: 'ARPaper' } });
-    console.log('DELETE finish');
   }
 
   const pluginLocation = await getConfig(

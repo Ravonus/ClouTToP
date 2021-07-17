@@ -1,19 +1,34 @@
 import { ipcRenderer } from 'electron/renderer';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { getConfig } from '../../../libs/configurator';
 import TopBar from './topBar';
 
 interface AppProps {}
 
 const App: FC<AppProps> = () => {
   const [darkmode, setDarkmode] = useState(false);
-  let plugin: any = useState('eef');
+  let plugin: any = useState({});
   let setPlugins: any;
-  [plugin, setPlugins] = useState('daw');
+  [plugin, setPlugins] = useState({});
 
-  ipcRenderer.on('pushPlugin', function (evt, message: any) {
-    console.log(message); // Returns: {'SAVED': 'File Saved'}
+  useEffect(() => {
+    (async () => {
+      const dm: any = await getConfig('application', 'main', 'darkmode');
+      setDarkmode(dm);
+    })();
 
-    setPlugins(message);
+    ipcRenderer.removeAllListeners('pluginAccept');
+    ipcRenderer.removeAllListeners('pushPlugin');
+
+    ipcRenderer.on('pluginAccept', function (evt, dm) {
+      setDarkmode(dm);
+    });
+
+    ipcRenderer.on('pushPlugin', function (evt, message: any) {
+      console.log(message); // Returns: {'SAVED': 'File Saved'}
+
+      setPlugins(message);
+    });
   });
 
   async function darkmodeCheck(value: boolean) {
@@ -21,13 +36,15 @@ const App: FC<AppProps> = () => {
   }
 
   return (
-    <>
+    <main
+      className={`${darkmode ? 'dark bg-gray-700' : 'bg-gray-200'} h-screen`}
+    >
       <TopBar
         darkmode={darkmode}
         setDarkmode={setDarkmode}
         darkmodeCheck={darkmodeCheck}
       />
-      <div className='text-center l flex flex-col justify justify-center dark:text-primary'>
+      <div className='text-center flex flex-col justify justify-center dark:text-primary dark:bg-gray-700 bg-gray-200'>
         <div className='pt-12'>
           <span>{plugin.name} is trying to install is this ok?</span>
 
@@ -60,7 +77,7 @@ const App: FC<AppProps> = () => {
           </div>
         </div>
       </div>
-    </>
+    </main>
   );
 };
 

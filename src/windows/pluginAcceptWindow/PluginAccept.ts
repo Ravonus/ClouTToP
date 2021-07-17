@@ -42,6 +42,7 @@ export const PluginAcceptWindow = (opts: any) => {
 
   window.loadURL(PLUGINACCEPT_WEBPACK_ENTRY);
 
+  //window.webContents.openDevTools();
   window.on('ready-to-show', () => {
     window.webContents.send('pushPlugin', opts);
   });

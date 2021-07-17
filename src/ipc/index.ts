@@ -10,3 +10,4 @@ export { configuratorGet } from './configuratorGet';
 export { configuratorDelete } from './configuratorDelete';
 export { pluginSetup } from './pluginSetup';
 export { isDev } from './isDev';
+export { pluginAccept } from './pluginAccept';

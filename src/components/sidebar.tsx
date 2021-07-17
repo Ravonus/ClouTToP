@@ -30,7 +30,7 @@ const Menu: FC<MenuProps> = ({ navInfo, setPage, darkmode }) => {
       // onMouseLeave={(event: any) => {
       //   event.target.style.borderColor = darkmode ? 'white' : 'black';
       // }}
-      className='fixed border-t-2 border-b-2 border-transparent group-hover:border-primary border-l-2 w-12 h-screen bg-gray-300 dark:bg-gray-500 flex justify-center'
+      className='fixed border-t-2 border-b-2 border-transparent group-hover:border-primary border-l-2 w-12 h-screen bg-gray-300 dark:bg-gray-500 flex justify-center z-50'
     >
       <div className='grid-flow-col grid-cols-1 grid-rows-1 gap-1'>
         <div className='h-10'></div>
@@ -110,7 +110,6 @@ const Menu: FC<MenuProps> = ({ navInfo, setPage, darkmode }) => {
             />
           </div>{' '}
         </NavLink>
-        ,
       </div>
     </div>
   );

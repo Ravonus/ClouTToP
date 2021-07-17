@@ -394,6 +394,7 @@ function App(props: any) {
                         <Component
                           script={<div>{link.html}</div>}
                           checkActive={checkActive}
+                          darkmode={darkmode}
                           sidebarCheck={sidebarCheck}
                           setPage={setPage}
                           addPluginMenu={addPluginMenu}

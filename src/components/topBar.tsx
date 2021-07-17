@@ -1,7 +1,7 @@
 //TODO: Add Settings to active side nav check.
 
 import { FC, useState } from 'react';
-import { remote } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 
 import Close from '../assets/icons/iconmonstr-x-mark-8.svg';
@@ -84,7 +84,7 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck, darkmode, setDarkmode }) => {
         }}
       ></div>
       <span className='fixed left-14 text-gray-900 dark:text-gray-200'>
-        ARScreenZ
+        ClouTTop
       </span>
       <div
         onClick={() => BrowserWindow.getFocusedWindow()?.close()}
@@ -137,6 +137,8 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck, darkmode, setDarkmode }) => {
           setDarkmode(dm);
           updateConfig('main', { darkmode: dm });
           darkmodeCheck(dm);
+
+          ipcRenderer.invoke('pluginAccept', dm);
         }}
       >
         {darkmode ? (
