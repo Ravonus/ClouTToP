@@ -46,11 +46,11 @@ module.exports = {
               js: './src/index.tsx',
               name: 'main_window',
             },
-            {
-              html: './src/windows/wallpaperWindow/renderers/index.html',
-              js: './src/windows/wallpaperWindow/renderers/index.tsx',
-              name: 'wallpaper',
-            },
+            // {
+            //   html: './src/windows/wallpaperWindow/renderers/index.html',
+            //   js: './src/windows/wallpaperWindow/renderers/index.tsx',
+            //   name: 'wallpaper',
+            // },
             {
               html: './src/windows/pluginAcceptWindow/renderers/index.html',
               js: './src/windows/pluginAcceptWindow/renderers/index.tsx',

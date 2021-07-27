@@ -28,6 +28,7 @@ import { isRenderFinished } from '../main';
 import { PluginAcceptWindow } from '../windows/pluginAcceptWindow/PluginAccept';
 import fR from 'electron-first-run';
 import { asyncForEach } from '../functions';
+import { loadPlugins } from './compiledPluginLoader';
 
 // import pluginsMainProcess from './pluginMainImporter';
 
@@ -87,6 +88,10 @@ export async function loader() {
         const id = nanoid();
         pluginCheck.ipcId = id;
         await pluginCheck.save();
+        // loadPlugins(
+        //   plugin.name,
+        //   path.join(`${pluginDirectory}/${plugin.name}/${plugin.fileName}`)
+        // );
         __non_webpack_require__(
           path.resolve(
             `${pluginDirectory}/${plugin}`,

@@ -34,3 +34,20 @@ body {
     brightness(118%) contrast(119%) drop-shadow(-0.5px -0.5px 0 black)
     drop-shadow(0.5px 0.5px 0 black);
 }
+
+label {
+  top: 0%;
+  transform: translateY(-100%);
+  font-size: 11px;
+}
+.empty input:not(:focus) + label {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+}
+input:not(:focus) + label {
+  color: rgba(70, 70, 70, 1);
+}
+input {
+  border-width: 1px;
+}

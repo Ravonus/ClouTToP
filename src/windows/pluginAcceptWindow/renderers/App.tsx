@@ -2,6 +2,7 @@ import { ipcRenderer } from 'electron/renderer';
 import { FC, useEffect, useState } from 'react';
 import { getConfig } from '../../../libs/configurator';
 import TopBar from './topBar';
+import { GreenButton, RedButton } from '../../../components/buttons/index';
 
 interface AppProps {}
 
@@ -47,33 +48,25 @@ const App: FC<AppProps> = () => {
       <div className='text-center flex flex-col justify justify-center dark:text-primary dark:bg-gray-700 bg-gray-200'>
         <div className='pt-12'>
           <span>{plugin.name} is trying to install is this ok?</span>
-
           <div className='grid grid-cols-2 gap-4 pt-12 px-4'>
-            <button
-              onClick={async () => {
-                console.log('RAN');
+            <GreenButton
+              text='Install'
+              onClick={() => {
                 ipcRenderer.invoke('pluginSetup', {
                   ...plugin,
                   install: true,
                 });
               }}
-              className='text-green-500 bg-transparent border border-solid border-green-500 hover:bg-green-500 hover:text-white active:bg-green-600 font-bold uppercase px-8 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-              type='button'
-            >
-              Install
-            </button>
-            <button
+            />
+            <RedButton
+              text='Remove'
               onClick={() => {
                 ipcRenderer.invoke('pluginSetup', {
                   ...plugin,
                   install: false,
                 });
               }}
-              className='text-red-500 bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase px-8 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-              type='button'
-            >
-              Remove
-            </button>
+            />
           </div>
         </div>
       </div>

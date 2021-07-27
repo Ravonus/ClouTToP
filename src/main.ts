@@ -10,7 +10,6 @@ import path from 'path';
 import isDev from 'electron-is-dev';
 
 //Local Modules
-import wp from './windows/wallpaperWindow/Wallpaper';
 import db from './ipc/database';
 import ipc from './libs/node-ipc';
 import { loader } from './libs/plugins';
@@ -69,19 +68,20 @@ const createWindow = () => {
 
   // Open the DevTools.
 
-  if (isDev) mainWindow.webContents.openDevTools();
+  //if (isDev)
+
+  mainWindow.webContents.openDevTools();
 
   mainWindow.webContents.on('did-finish-load', function () {
     mainWindow?.show();
-    wp();
 
     if (firstRun)
-      loadPlugins(
-        'ARPaper',
-        path.join(__dirname, '../../cloutPlugins/ARPaper/src/pages/main.js')
-      );
+      // loadPlugins(
+      //   'ARPaper',
+      //   path.join(__dirname, '../../cloutPlugins/ARPaper/src/pages/main.js')
+      // );
 
-    console.log('FIRSTRUN');
+      console.log('FIRSTRUN');
     firstRun = false;
   });
 

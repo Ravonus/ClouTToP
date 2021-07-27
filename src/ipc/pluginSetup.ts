@@ -10,6 +10,7 @@ import { grabPluginAcceptWindows } from '../windows/pluginAcceptWindow/PluginAcc
 import path from 'path';
 import { nanoid } from 'nanoid';
 import { mainWindow } from '../main';
+import { loadPlugins } from '../libs/compiledPluginLoader';
 
 export const pluginSetup = ipcMain.handle(
   'pluginSetup',
@@ -27,7 +28,17 @@ export const pluginSetup = ipcMain.handle(
       );
 
       mainWindow.webContents.send(`pluginInstall-${opts.name}`, opts);
-      console.log('WTF', opts.myPluginDirectory, opts.mainProcess);
+
+      console.log(
+        'ERK',
+        path.join(`${opts.myPluginDirectory}/${opts.fileName}`)
+      );
+
+      loadPlugins(
+        opts.name,
+        path.join(`${opts.myPluginDirectory}/${opts.fileName}`)
+      );
+
       __non_webpack_require__(
         path.resolve(opts.myPluginDirectory, opts.mainProcess)
       ).default(id);
