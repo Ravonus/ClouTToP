@@ -19,7 +19,9 @@ import {
   BelongsTo,
   Unique,
   Default,
+  HasOne,
 } from 'sequelize-typescript';
+import Setting from './Setting';
 
 // Plugin functions
 
@@ -57,6 +59,12 @@ export default class Plugin extends Model<
   @Default(false)
   @Column({ type: DataType.BOOLEAN })
   registered!: boolean;
+
+  // @HasOne(() => {
+  //   console.log('DB SETUP');
+  //   return Setting;
+  // }, 'settingId')
+  // setting!: string;
 
   //Relationships
 }

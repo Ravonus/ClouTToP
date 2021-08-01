@@ -6,16 +6,17 @@
  * @desc [description]
  */
 import { Sequelize } from 'sequelize-typescript';
+import path from 'path';
 
 import eLogger from 'electron-log';
-
-import path from 'path';
 
 //Local
 import Setting from '../models/Setting';
 import Plugin from '../models/Plugin';
 
 import dbSetup from '../config/databaseSetup';
+
+export const Models = {};
 
 //import setup from '../setup/db';
 
@@ -33,20 +34,41 @@ const sequelize = new Sequelize('ARScreenz', 'ARUser', 'randompassword', {
 
 sequelize.addModels([Setting, Plugin]);
 
+// sequelize.models.Setting.hasOne(sequelize.models.Plugin, {
+//   foreignKey: 'pluginId',
+// });
+
 //sequelize.addModels([path.join(__dirname, '../', 'models/')]);
 
 export async function waitForModels() {
   await sequelize.sync();
+  (global as any).models = sequelize.models;
   // await setup();
   //  require('../authentication/auth');
 }
 
 export async function addModels(models: any[]) {
-  console.log('NODE', models);
-  sequelize.addModels(models);
+  // console.log('NODE', models);
+
+  const fileModels: any = [];
+
+  models.map((model) => {
+    fileModels.push(__non_webpack_require__(model).default);
+  });
+
+  sequelize.addModels(fileModels);
   await sequelize.sync();
+  (global as any).models = sequelize.models;
 }
 
 dbSetup();
 
 export { sequelize, Setting, Plugin };
+
+export async function setRelationship(
+  modelName: string,
+  relationshipName: string
+) {
+  const model = sequelize.models[modelName];
+  const relationshipModel = sequelize.models[relationshipName];
+}

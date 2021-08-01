@@ -17,6 +17,9 @@ import {
 } from 'react-router-dom';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
+import SlidingPanel from 'react-sliding-side-panel';
+
+import SidePanel from './components/side/Side';
 
 //Pages
 import Dashboard from './pages/dashboard';
@@ -101,6 +104,7 @@ async function waitForNavigation(type: 'id' | 'class', id: string) {
 function App(props: any) {
   const [darkmode, setDarkmode] = useState(false);
   const [routesLoaded, setRoutesLoaded] = useState(['']);
+  const [openPanel, setOpenPanel] = useState(false);
   const [page, setPage] = useState('dashboard');
   const [dbLoaded, setDbLoaded] = useState(false);
   const [routes, setRoutes] = useState([
@@ -153,6 +157,7 @@ function App(props: any) {
     (async () => {
       const dm: any = await getConfig('application', 'main', 'darkmode');
       setDarkmode(dm);
+      if (dm) document.body.classList.add('dark');
       const pluginButton: any = await waitForNavigation('id', 'PluginsButton');
       pluginButton?.click();
       //TODO: Need a way to not keep waiting if user has no plugins (Would be odd as the app does nothing without plugins)
@@ -357,6 +362,9 @@ function App(props: any) {
   }
 
   useEffect(() => {
+    if (darkmode) document.body.classList.add('dark');
+    else document.body.classList.remove('dark');
+
     setMenu({
       mainMenu: mainMenuGenerator(false),
       pluginMenu: menu.pluginMenu,
@@ -379,8 +387,13 @@ function App(props: any) {
             darkmodeCheck={darkmodeCheck}
           />
           <Menu darkmode={darkmode} setPage={setPage} navInfo={menu} />
-          <div className='h-screen bg-gray-200 dark:bg-gray-700 border-transparent group-hover:border-primary border-2'>
-            <div className='container pt-8'>
+          <button
+            style={{ position: 'absolute', top: 100, zIndex: 999999 }}
+            onClick={() => setOpenPanel(true)}
+          ></button>
+
+          <div className='border-transparent group-hover:border-primary border-2'>
+            <div className='flex flex-wrap content-center pt-8 pl-12'>
               {routes.map((link: any) => {
                 if (checkLoadedRoutes.includes(link.link)) return;
                 checkLoadedRoutes.push(link.link);

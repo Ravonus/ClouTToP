@@ -39,17 +39,55 @@ ipc.serve(function () {
         where: { ipcId: socket.id },
       });
 
-      console.log('APPLICATION', application, ipc.config.id);
-
       if (!application)
         return serverEmit(socket, { error: 'IPC App ID mismatch.' });
     }
 
-    if (data.type === 'addModel') await addModels([path.resolve(data.models)]);
+    if (data.type === 'addModel') {
+      await addModels(data.models);
+    }
+
+    if (data.type === 'relationships') {
+      data.relationships.map((relationship: any) => {
+        const model: any = (global as any).models[relationship.model];
+        const relationshipModel: any = (global as any).models[
+          relationship.relationshipModel
+        ];
+
+        console.log(
+          Object.keys(Plugin),
+          Object.keys((global as any).models.Library)
+        );
+
+        // relationshipModel.belongsTo(
+        //   () => {
+        //     return model;
+        //   },
+        //   { foreignKey: 'sceneId' }
+
+        // );
+
+        sequelize.models.Setting.hasOne(sequelize.models.Library, {
+          foreignKey: 'libraryId',
+        });
+
+        // (global as any).models.Plugin.hasOne(
+        //   Object.keys((global as any).models.Setting),
+        //   {
+        //     foreignKey: 'settingId',
+        //     as: 'settings',
+        //   }
+        // );
+
+        // model[relationship.type](relationshipModel, relationship.opts);
+      });
+    }
 
     if (data.type === 'database') {
       const model: any = sequelize.models[data.table];
-      doc = await model[data.method](data.values).catch((e: any) => {});
+      doc = await model[data.method](data.values).catch((e: any) => {
+        console.log(e);
+      });
     }
 
     serverEmit(socket, { doc, type: data.type, emitterId: data.emitterId });
