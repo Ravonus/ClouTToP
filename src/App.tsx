@@ -40,6 +40,8 @@ import DashboardIcon from './assets/icons/iconmonstr-dashboard-4.svg';
 import plugins from './libs/pluginImporter';
 import { wait } from './functions';
 import { getConfig } from './libs/configurator';
+import { link } from 'fs';
+import { stringify } from 'querystring';
 
 //Import Styles
 //import './App.scss';
@@ -100,14 +102,18 @@ async function waitForNavigation(type: 'id' | 'class', id: string) {
   }
   return pluginButton;
 }
-
+let entered = 0;
 function App(props: any) {
   const [darkmode, setDarkmode] = useState(false);
   const [routesLoaded, setRoutesLoaded] = useState(['']);
   const [openPanel, setOpenPanel] = useState(false);
   const [page, setPage] = useState('dashboard');
-  const [dbLoaded, setDbLoaded] = useState(false);
-  const [routes, setRoutes] = useState([
+  const [showFileOverlay, setShowFileOverlay] = useState<{
+    [key: string]: boolean;
+  }>({ plugins_ARPaper_library: false });
+  const [routes, setRoutes] = useState<
+    { name: string; link: string; component?: string; props?: any }[]
+  >([
     { name: 'Dashboard', link: '/dashboard', component: 'Dashboard' },
     { name: 'Help', link: '/help', component: 'Help' },
     { name: 'About', link: '/about' },
@@ -121,18 +127,19 @@ function App(props: any) {
     Settings,
     Plugins,
   });
-  let history = useHistory();
 
-  async function setRoute(value: any) {
+  async function setRoute(value: any, props?: any) {
+    console.log(props);
     routes.push({
       name: value.name,
       component: value.component,
       link: value.path || value.link,
+      props,
     });
     await setRoutes(routes);
   }
 
-  function setRoutePage(opt: any, component: any) {
+  function setRoutePage(opt: any, component: any, props?: any) {
     const name = opt.component;
     if (routesLoaded.includes(name.toLocaleLowerCase())) {
       //  setRoute(opt);
@@ -142,7 +149,7 @@ function App(props: any) {
       setRoutePages(routePages);
       routesLoaded.push(name.toLocaleLowerCase());
       setRoutesLoaded(routesLoaded);
-      setRoute(opt);
+      setRoute(opt, props);
     }
   }
 
@@ -154,6 +161,59 @@ function App(props: any) {
   }
 
   useEffect(() => {
+    const dragover = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    const dragenter = async (event: DragEvent) => {
+      if (entered !== 0) {
+        const loc: string = location.hash.substring(2);
+        const cacheObj = showFileOverlay;
+
+        cacheObj[loc] = true;
+
+        await setShowFileOverlay({});
+        await setShowFileOverlay(cacheObj);
+      }
+
+      entered = 1;
+    };
+
+    const dragleave = async (event: DragEvent) => {
+      if (entered === 0) {
+        const loc: string = location.hash.substring(2);
+        const cacheObj = showFileOverlay;
+
+        cacheObj[loc] = false;
+
+        await setShowFileOverlay({});
+        await setShowFileOverlay(cacheObj);
+      } else entered--;
+    };
+
+    const drop = async (event: DragEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const loc: string = location.hash.substring(2);
+      const cacheObj = showFileOverlay;
+
+      cacheObj[loc] = false;
+
+      await setShowFileOverlay({});
+      await setShowFileOverlay(cacheObj);
+    };
+
+    document.removeEventListener('dragover', dragover);
+    document.removeEventListener('dragenter', dragenter);
+    document.removeEventListener('dragleave', dragleave);
+    document.removeEventListener('drag', drop);
+
+    document.addEventListener('dragover', dragover);
+    document.addEventListener('dragenter', dragenter);
+    document.addEventListener('dragleave', dragleave);
+    document.addEventListener('drop', drop);
+
     (async () => {
       const dm: any = await getConfig('application', 'main', 'darkmode');
       setDarkmode(dm);
@@ -358,7 +418,9 @@ function App(props: any) {
     if (el2) el2.click();
 
     await wait(100);
-    if (route) setRoutePage(route.route, route.component);
+
+    if (route.route.name === 'library') console.log('props', props);
+    if (route) setRoutePage(route.route, route.component, props);
   }
 
   useEffect(() => {
@@ -413,6 +475,8 @@ function App(props: any) {
                           addPluginMenu={addPluginMenu}
                           setRoute={setRoute}
                           setRoutePage={setRoutePage}
+                          overlay={showFileOverlay}
+                          {...link.props}
                           {...props}
                         />
                       );

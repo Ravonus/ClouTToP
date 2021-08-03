@@ -58,6 +58,7 @@ const createWindow = () => {
       nodeIntegrationInSubFrames: true,
       webviewTag: true,
       nodeIntegration: true,
+      webSecurity: false,
       enableRemoteModule: true,
       contextIsolation: false,
     },

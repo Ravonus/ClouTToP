@@ -74,7 +74,7 @@ const TopBar: FC<TopProps> = ({ darkmodeCheck, darkmode, setDarkmode }) => {
     if (rect) setWidth(rect.right - 43);
   });
   return (
-    <div className='flex flex-wrap content-end'>
+    <div className='flex flex-wrap content-end z-50'>
       <div className='fixed border-t-2 border-r-2 border-transparent group-hover:border-primary group-focus:border-red-primary w-screen h-9 bg-gray-200 dark:bg-gray-700'></div>
 
       <div
